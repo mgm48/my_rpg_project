@@ -32,6 +32,10 @@ int main() {
 	else
 		std::cout << "equip failed!\n";
 
+	Item* HealPotion = ItemManager::createPotion("Minor Heal Potion", 1u, 5u);
+
+
+
 	for (int j = 0; j < n; j++) {
 		for (int i = 0; i < 2; i++) {
 			std::cout
@@ -93,8 +97,18 @@ int main() {
 					ps[j]->applyBuff(arm_buff);
 				}
 			}
+
+			ps[j]->takeDamage(4);
+			std::cout << "Ouch! Before healing!" << "-HP: " << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
+			if (ps[j]->use(HealPotion))
+				std::cout << "Healed!" << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
+			else
+				std::cout << "heal failed!\n";
+
 		}
 	}
+
+
 
 	return 0;
 }

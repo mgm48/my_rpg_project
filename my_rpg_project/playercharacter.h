@@ -297,6 +297,40 @@ public:
 		return false;
 	}
 
+	bool use(Item* thing) {
+		if(!thing)
+			return false;
+		if (!thing->GetData())
+			return false;
+
+		Potion* potion = dynamic_cast<Potion*>(thing->_data);
+		if (potion) {
+			
+				
+			if (potion->Effect) {
+				pcclass->applyBuff(*potion->Effect);
+			}
+			
+			
+			// if max health and trying to use a heal potion, don't use itS
+			if (pcclass->HP->isFull() && !potion->Effect)
+				return false; // don't use the potion
+
+			//if (potion->HealAmount > 0)
+			pcclass->HP->addCur(potion->HealAmount);
+
+			potion->Quantity--;
+
+			if (potion->Quantity == 0) {
+				delete potion;
+			}
+			return true;
+
+		}
+		return false;
+	}
+
+
 	// deleted constructors
 	PlayerCharacter() = delete;
 	PlayerCharacter(const PlayerCharacter&) = delete;

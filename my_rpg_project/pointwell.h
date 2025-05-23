@@ -68,6 +68,8 @@ public:
 			CurrentPW += amount;
 	}
 
+	bool isFull() { return MaxPW == CurrentPW; }
+
 	//getters
 	t_pw getCurrent() { return CurrentPW; }
 	t_pw getMax() { return MaxPW; }
