@@ -170,9 +170,12 @@ private:
 class PlayerCharacter {
 private: 
 	PlayerCharacterDelegate* pcclass;
-	EquipmentDelegate* EquippedArmor[(unsigned long long)ARMORSLOT::NUM_SLOTS]; //the array wants unsigned long long
-	EquipmentDelegate* EquippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
+	Item* EquippedArmor[(unsigned long long)ARMORSLOT::NUM_SLOTS]; //the array wants unsigned long long
+	Item* EquippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
 	CoreStats EquipmentModifier;
+	std::vector<Item*> Backpack;
+
+	friend class ItemManager;
 
 public:
 	PlayerCharacter(PlayerCharacterDelegate* pc) : pcclass(pc), EquipmentModifier(0,0,0,0,0) {
@@ -233,9 +236,9 @@ public:
 	t_stat getTotalArmor() { return pcclass->getTotalArmor() + EquipmentModifier.Armor; }
 	t_stat getTotalElementRes() { return pcclass->getTotalElementRes() + EquipmentModifier.ElementRes; }
 
-	std::vector<Ability> getAbilityList() { return pcclass->Abilities; }
-	std::uint16_t getNumberOfAbilities() { return (std::uint16_t)pcclass->Abilities.size(); }
-	std::vector<Buff> getBuffList() { return pcclass->getBuffList(); }
+	const std::vector<Ability> getAbilityList() const { return pcclass->Abilities; }
+	const std::vector<Buff> getBuffList() const { return pcclass->getBuffList(); }
+	const std::vector<Item*> getBackpackList() const { return Backpack; }
 
 	EquipmentDelegate* getEquippedArmorAt(unsigned long long i) { return (dynamic_cast<Armor*>(EquippedArmor[i])); }
 
@@ -249,87 +252,8 @@ public:
 	void applyBuff(Buff buff) {
 		pcclass->applyBuff(buff);
 	}
-
-	// todo: update once we have an inventory
-	bool equip(Item* thing) {
-		if (!thing)
-			return false;
-		if (!thing->GetData())
-			return false;
-
-		Armor* armor = dynamic_cast<Armor*>(thing->_data);
-		if (armor) {
-			//check what slot it is
-			unsigned long long slot_num = (unsigned long long)armor->Slot;
-
-			if (EquippedArmor[slot_num]) { //delete old armor
-				EquipmentModifier -= EquippedArmor[slot_num]->Stats; //remove modifiers
-				delete EquippedArmor[slot_num];
-				EquippedArmor[slot_num] = nullptr;
-				EquippedArmor[slot_num] = armor;
-			}
-			else {
-				EquippedArmor[slot_num] = armor; //equip
-			}
-			EquipmentModifier += armor->Stats;
-
-			return true;
-		}
-
-		Weapon* weapon = dynamic_cast<Weapon*>(thing->_data);
-		if (weapon) {
-			unsigned long long slot_num = (unsigned long long)weapon->Slot;
-
-			if (EquippedWeapons[slot_num]) {
-				EquipmentModifier -= EquippedWeapons[slot_num]->Stats;
-				delete EquippedWeapons[slot_num];  // todo: move to invetory instead of delete
-				EquippedWeapons[slot_num] = nullptr;
-				EquippedWeapons[slot_num] = weapon;
-			}
-			else {
-				EquippedWeapons[slot_num] = weapon;
-			}
-			EquipmentModifier += weapon->Stats;
-
-			return true;
-		}
-		
-		return false;
-	}
-
-	bool use(Item* thing) {
-		if(!thing)
-			return false;
-		if (!thing->GetData())
-			return false;
-
-		Potion* potion = dynamic_cast<Potion*>(thing->_data);
-		if (potion) {
-			
-				
-			if (potion->Effect) {
-				pcclass->applyBuff(*potion->Effect);
-			}
-			
-			
-			// if max health and trying to use a heal potion, don't use itS
-			if (pcclass->HP->isFull() && !potion->Effect)
-				return false; // don't use the potion
-
-			//if (potion->HealAmount > 0)
-			pcclass->HP->addCur(potion->HealAmount);
-
-			potion->Quantity--;
-
-			if (potion->Quantity == 0) {
-				delete potion;
-			}
-			return true;
-
-		}
-		return false;
-	}
-
+	
+private:
 
 	// deleted constructors
 	PlayerCharacter() = delete;

@@ -14,20 +14,20 @@ int main() {
 	//armor stuff
 	CoreStats plate_armor_stats(0, 0, 0, 5, 3);
 	Item* FullPlateMail = ItemManager::createArmor("Shiny Plate Armor", plate_armor_stats, ARMORSLOT::CHEST);
-	if (p1.equip(FullPlateMail))
+	if (p1.Equip(FullPlateMail))
 		std::cout << "equip success!\n";
 	else
 		std::cout << "equip failed!\n";
 
 	CoreStats leather_helm_stats(0, 0, 0, 1, 1);
 	Item* LeatherHelm = ItemManager::createArmor("Plain Leather Helmet", leather_helm_stats, ARMORSLOT::HELMET);
-	if (p2.equip(LeatherHelm))
+	if (p2.Equip(LeatherHelm))
 		std::cout << "equip success!\n";
 	else
 		std::cout << "equip failed!\n";
 
 	Item* LongSword = ItemManager::createWeapon("Long Sword", CoreStats(), WEAPONSLOT::MELEE, 3, 9);
-	if (p1.equip(LongSword))
+	if (p1.Equip(LongSword))
 		std::cout << "equip success!\n";
 	else
 		std::cout << "equip failed!\n";
@@ -52,6 +52,7 @@ int main() {
 				<< '\n';
 
 			auto AllAbilities = ps[j]->getAbilityList();
+			auto AllBuffs = ps[j]->getBuffList();
 
 			if (!AllAbilities.empty()) {
 				std::cout << "-Abilities:\n";
@@ -59,7 +60,7 @@ int main() {
 					std::cout << "  -" << abil.Name << '\n';
 				}
 			}
-			auto AllBuffs = ps[j]->getBuffList();
+
 			if (!AllBuffs.empty()) {
 				std::cout << "-Buffs:\n";
 				for (auto& b : AllBuffs) {
@@ -100,7 +101,7 @@ int main() {
 
 			ps[j]->takeDamage(4);
 			std::cout << "Ouch! Before healing!" << "-HP: " << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
-			if (ps[j]->use(HealPotion))
+			if (ps[j]->Use(HealPotion))
 				std::cout << "Healed!" << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
 			else
 				std::cout << "heal failed!\n";
