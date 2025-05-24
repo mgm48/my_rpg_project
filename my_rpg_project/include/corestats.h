@@ -12,13 +12,6 @@ struct CoreStats {
 
 	CoreStats(t_stat str = 0, t_stat inte = 0, t_stat agi = 0, t_stat arm = 0, t_stat res = 0)
 		: Strength(str), Intellect(inte), Agility(agi), Armor(arm), ElementRes(res) {
-		/*
-		Strength = str;
-		Intellect = inte;
-		Agility = agi;
-		Armor = arm;
-		ElementRes = res;
-		*/
 	}
 
 	void set(t_stat str = 0, t_stat inte = 0, t_stat agi = 0, t_stat arm = 0, t_stat res = 0) {
@@ -79,6 +72,6 @@ struct CoreStats {
 		this->ElementRes = rhs;
 		return *this;
 	}
-	
+
 	
 };

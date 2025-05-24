@@ -42,6 +42,9 @@ protected:
 	void increaseStats(CoreStats cs) {
 		base += cs;
 	}
+	void setStats(t_stat str = 0, t_stat inte = 0, t_stat agi = 0, t_stat arm = 0, t_stat res = 0) {
+
+	}
 	void addNewBuff(Buff b) {
 		for (auto& buff : Buffs) { //if the buff is already in the list of applied buffs
 			if (b.Name == buff.Name) {

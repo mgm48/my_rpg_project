@@ -22,12 +22,11 @@ public:
 		ExpToNextLevel = LEVEL2AT;
 		HP = std::make_unique<PointWell>();
 	}
-	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi) : Stats() {
+	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi) : Stats(str, in, agi) {
 		CurrentLevel = (t_level)1u;
 		CurrentExp = (t_exp)0u;
 		ExpToNextLevel = LEVEL2AT;
 		HP = std::make_unique<PointWell>(bhp);
-		increaseStats(str, in, agi);
 	}
 
 	void gainExp(t_exp gained_exp) {
@@ -239,6 +238,12 @@ public:
 	t_stat getAgility() const { return pcclass->getAgility(); }
 	t_stat getArmor() const { return pcclass->getArmor(); }
 	t_stat getElementRes() const { return pcclass->getElementRes(); }
+
+	t_stat getStrengthModifier() const { return pcclass->getStrengthModifier(); }
+	t_stat getIntellectModifier() const { return pcclass->getIntellectModifier(); }
+	t_stat getAgilityModifier() const { return pcclass->getAgilityModifier(); }
+	t_stat getArmorModifier() const { return pcclass->getArmorModifier(); }
+	t_stat getElementResModifier() const { return pcclass->getElementResModifier(); }
 
 	t_stat getTotalStrength() const { return pcclass->getTotalStrength() + EquipmentModifier.Strength; }
 	t_stat getTotalIntellect() const { return pcclass->getTotalIntellect() + EquipmentModifier.Intellect; }

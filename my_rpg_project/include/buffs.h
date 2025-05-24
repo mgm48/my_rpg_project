@@ -18,6 +18,7 @@ struct Buff {
 	uint16_t Duration;
 
 	CoreStats Modifiers;
+	
 };
 
 struct StrengthBuff : public Buff {

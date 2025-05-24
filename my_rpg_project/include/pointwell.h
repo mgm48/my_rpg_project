@@ -36,7 +36,7 @@ public:
 			CurrentPW = MaxPW;
 	}
 
-	void addMax(t_pw add_max, bool restore) {
+	void addMax(t_pw add_max, bool restore = true) {
 		if (add_max > 0) {
 			MaxPW += add_max;
 		}

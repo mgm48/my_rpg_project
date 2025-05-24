@@ -15,39 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="rpg_systems_unit_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="items.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\abilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\buffs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\corestats.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\item_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\items.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\playercharacter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pointwell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stats.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\types.h">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
