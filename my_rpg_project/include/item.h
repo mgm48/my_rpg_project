@@ -71,9 +71,7 @@ private:
 class Item {
 public:
 	const ItemDelegate* GetData() { return _data; } //const pointer, cant be modified except const cast but thats too much
-	
 	bool isMarkedForDeletion() const { return marked_for_deletion; }
-
 private:
 	~Item() { //to prevent memory leaks 
 		if (_data) {
@@ -81,7 +79,6 @@ private:
 			_data = nullptr;
 		}
 	}
-
 	ItemDelegate* _data; //we need to instatiate this at runtime, also private so it cant getchanged
 	bool marked_for_deletion = false;
 	Item(ItemDelegate* item) : _data(item) {}
