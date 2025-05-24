@@ -73,6 +73,9 @@ public:
 	[[nodiscard]] const EquipmentDelegate* GetEquippedArmorAt(unsigned long long i) noexcept;
 	[[nodiscard]] const EquipmentDelegate* GetEquippedWeaponAt(unsigned long long i) noexcept;
 
+	const t_dmg MeleeAttack() const noexcept;
+	const t_dmg RangedAttack() const noexcept;
+
 	//Mutators
 	void GiveExp(t_exp amt) noexcept;
 	void TakeDamage(t_pw dmg) noexcept;

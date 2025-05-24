@@ -1,4 +1,5 @@
 #include "playercharacter.h"
+#include "random.h"
 #include <memory>
 
 //PlayerCharacterDelegate
@@ -120,6 +121,32 @@ PlayerCharacter::~PlayerCharacter() {
 [[nodiscard]] const EquipmentDelegate* PlayerCharacter::GetEquippedWeaponAt(unsigned long long i) noexcept {
 	if (!_equipped_weapons[i]) return nullptr;
 	return (dynamic_cast<Weapon*>(_equipped_weapons[i]->_data));
+}
+const t_dmg PlayerCharacter::MeleeAttack() const noexcept {
+	t_dmg tmp_damage = 0;
+
+	if (_equipped_weapons[(unsigned long long)WEAPONSLOT::MELEE]) {
+		const Weapon* equipped_weapon = dynamic_cast<Weapon*>(_equipped_weapons[(unsigned long long)WEAPONSLOT::MELEE]->_data);
+		if (equipped_weapon) {
+			tmp_damage = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
+		}
+	}
+	//default damage is 1/4 of total strength
+	tmp_damage += t_dmg(GetTotalStrength() / 4.f);
+
+	return tmp_damage;
+}
+const t_dmg PlayerCharacter::RangedAttack() const noexcept {
+	t_dmg tmp_damage_done = 0;
+	if (_equipped_weapons[(unsigned long long)WEAPONSLOT::RANGED]) {
+		const Weapon* equipped_weapon = dynamic_cast<Weapon*>(_equipped_weapons[(unsigned long long)WEAPONSLOT::RANGED]->_data);
+		// if weapon exists get the damage, else the base damage stays 0
+		if (equipped_weapon) {
+			tmp_damage_done = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
+			tmp_damage_done += t_dmg(GetTotalAgility() / 4.f);  // add 1/4 of agi as bonus ranged damage
+		}
+	}
+	return tmp_damage_done;
 }
 
 void PlayerCharacter::GiveExp(t_exp amt) noexcept { _player_class->GiveExp(amt); }

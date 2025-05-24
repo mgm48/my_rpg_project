@@ -7,6 +7,7 @@
 	return tmpi; //returns copy of pointer to data
 }
 void ItemManager::CastItemToArmor(const Item* in, Armor*& out) {
+	if (!in) return;
 	out = dynamic_cast<Armor*>(in->_data);
 }
 
@@ -21,6 +22,7 @@ bool ItemManager::IsItemArmor(const Item* in) {
 }
 
 void ItemManager::CastItemToWeapon(const Item* in, Weapon*& out) { //we need the reference bc if not it passes a copy of the pointer
+	if (!in) return;
 	out = dynamic_cast<Weapon*>(in->_data);
 }
 
@@ -35,6 +37,7 @@ bool ItemManager::IsItemWeapon(const Item* in) {
 }
 
 void ItemManager::CastItemToPotion(const Item* in, Potion*& out) {
+	if (!in) return;
 	out = dynamic_cast<Potion*>(in->_data);
 }
 bool ItemManager::IsItemPotion(const Item* in) {

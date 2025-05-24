@@ -138,12 +138,14 @@
     <ClCompile Include="ability.cpp" />
     <ClCompile Include="buff.cpp" />
     <ClCompile Include="corestats.cpp" />
+    <ClCompile Include="monster.cpp" />
     <ClCompile Include="playableclasses.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="playercharacter.cpp" />
     <ClCompile Include="pointwell.cpp" />
+    <ClCompile Include="random.cpp" />
     <ClCompile Include="stats.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +159,8 @@
     <ClInclude Include="include\pointwell.h" />
     <ClInclude Include="include\stats.h" />
     <ClInclude Include="include\types.h" />
+    <ClInclude Include="include\monster.h" />
+    <ClInclude Include="include\random.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
