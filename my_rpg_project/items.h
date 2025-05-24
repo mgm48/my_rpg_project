@@ -66,14 +66,14 @@ enum class WEAPONSLOT { MELEE, RANGED, NUM_SLOTS };
 class Weapon final : public EquipmentDelegate {
 public:
 	WEAPONSLOT Slot;
-	t_dmg minDmg;
-	t_dmg maxDmg;
+	t_dmg MinDamage;
+	t_dmg MaxDamage;
 	bool is2H; //twohander vs onehander
 
 	GETTYPE
 private:
 	Weapon(std::string name, CoreStats stats, WEAPONSLOT slot, t_dmg mind, t_dmg maxd, bool hands = false) : 
-		EquipmentDelegate(name, stats), Slot(slot), minDmg(mind), maxDmg(maxd), is2H(hands) {
+		EquipmentDelegate(name, stats), Slot(slot), MinDamage(mind), MaxDamage(maxd), is2H(hands) {
 	}
 
 	Weapon() = delete; //so no one can use a default empty constructor
@@ -83,6 +83,7 @@ private:
 	friend class ItemManager;
 };
 
+#include <iostream>  // for testing
 // use this one in your runtime code
 class Item {
 public:
@@ -93,9 +94,30 @@ public:
 			_data = nullptr;
 		}
 	}
+	bool isMarkedForDeletion() const { return marked_for_deletion; }
+
 private:
 	ItemDelegate* _data; //we need to instatiate this at runtime, also private so it cant getchanged
+	bool marked_for_deletion = false;
 	Item(ItemDelegate* item) : _data(item) {}
+
 	friend class ItemManager; //friend clases can instantiate this class
 	friend class PlayerCharacter;
+
+	friend std::ostream& operator<<(std::ostream& os, const Item& t) {
+		Armor* tmp_cast = dynamic_cast<Armor*>(t._data);
+		if (tmp_cast) {
+			return os << tmp_cast->Name << "(Armor: " << tmp_cast->Stats.Armor << ", Resist: " << tmp_cast->Stats.ElementRes << ')';
+		}
+		Weapon* tmp_cast2 = dynamic_cast<Weapon*>(t._data);
+		if (tmp_cast2) {
+			return  os << tmp_cast2->Name << "(Damage: " << tmp_cast2->MinDamage << '-' << tmp_cast2->MaxDamage << ')';
+		}
+		Potion* tmp_cast3 = dynamic_cast<Potion*>(t._data);
+		if (tmp_cast3) {
+			return os << tmp_cast3->Name << '(' << tmp_cast3->Quantity << ')';
+		}
+		return os;
+	}
+
 };

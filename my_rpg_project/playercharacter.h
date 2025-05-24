@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 class PlayerCharacterDelegate : public Stats { // delegate is a pure abstract class
@@ -174,6 +175,15 @@ private:
 	Item* EquippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
 	CoreStats EquipmentModifier;
 	std::vector<Item*> Backpack;
+	void cleanup_backpack() { //to be refactored
+		//stable partition puts everything that has the condition at the start, and the iterator is to the first marked for deletion item
+		const auto to_remove = std::stable_partition(Backpack.begin(), Backpack.end(), //returns iterator
+			[](const Item* i) -> bool {return !i->isMarkedForDeletion(); }); //lambda funtion
+
+		std::for_each(to_remove, Backpack.end(), [](Item* i) {delete i; });
+
+		Backpack.erase(to_remove, Backpack.end());
+	}
 
 	friend class ItemManager;
 
@@ -206,43 +216,49 @@ public:
 	}
 
 	//Getters
-	std::string getClassName() { return pcclass->getClassName(); }
-	t_level getLevel() { return pcclass->getLevel(); }
-	t_exp getCurrentExp() { return pcclass->getCurrentExp(); }
-	t_exp getExpToNextLevel() { return pcclass->getExpToNextLevel(); }
-	t_pw getMaxHP() { return pcclass->HP->getMax(); }
-	t_pw getCurrentHP() { return pcclass->HP->getCurrent(); }
-	t_pw getCurrentMP() {
+	std::string getClassName() const { return pcclass->getClassName(); }
+	t_level getLevel() const { return pcclass->getLevel(); }
+	t_exp getCurrentExp() const { return pcclass->getCurrentExp(); }
+	t_exp getExpToNextLevel() const { return pcclass->getExpToNextLevel(); }
+	t_pw getMaxHP() const { return pcclass->HP->getMax(); }
+	t_pw getCurrentHP() const { return pcclass->HP->getCurrent(); }
+	t_pw getCurrentMP() const  {
 		if (pcclass->MP)
 			return pcclass->MP->getCurrent();
 		else
 			return 0;
 	}
-	t_pw getMaxMP() {
+	t_pw getMaxMP() const  {
 		if (pcclass->MP)
 			return pcclass->MP->getMax();
 		else
 			return 0;
 	}
-	t_stat getStrength() { return pcclass->getStrength(); }
-	t_stat getIntellect() { return pcclass->getIntellect(); }
-	t_stat getAgility() { return pcclass->getAgility(); }
-	t_stat getArmor() { return pcclass->getArmor(); }
-	t_stat getElementRes() { return pcclass->getElementRes(); }
+	t_stat getStrength() const { return pcclass->getStrength(); }
+	t_stat getIntellect() const { return pcclass->getIntellect(); }
+	t_stat getAgility() const { return pcclass->getAgility(); }
+	t_stat getArmor() const { return pcclass->getArmor(); }
+	t_stat getElementRes() const { return pcclass->getElementRes(); }
 
-	t_stat getTotalStrength() { return pcclass->getTotalStrength() + EquipmentModifier.Strength; }
-	t_stat getTotalIntellect() { return pcclass->getTotalIntellect() + EquipmentModifier.Intellect; }
-	t_stat getTotalAgility() { return pcclass->getTotalAgility() + EquipmentModifier.Agility; }
-	t_stat getTotalArmor() { return pcclass->getTotalArmor() + EquipmentModifier.Armor; }
-	t_stat getTotalElementRes() { return pcclass->getTotalElementRes() + EquipmentModifier.ElementRes; }
+	t_stat getTotalStrength() const { return pcclass->getTotalStrength() + EquipmentModifier.Strength; }
+	t_stat getTotalIntellect() const { return pcclass->getTotalIntellect() + EquipmentModifier.Intellect; }
+	t_stat getTotalAgility() const { return pcclass->getTotalAgility() + EquipmentModifier.Agility; }
+	t_stat getTotalArmor() const { return pcclass->getTotalArmor() + EquipmentModifier.Armor; }
+	t_stat getTotalElementRes() const { return pcclass->getTotalElementRes() + EquipmentModifier.ElementRes; }
 
 	const std::vector<Ability> getAbilityList() const { return pcclass->Abilities; }
 	const std::vector<Buff> getBuffList() const { return pcclass->getBuffList(); }
 	const std::vector<Item*> getBackpackList() const { return Backpack; }
 
-	EquipmentDelegate* getEquippedArmorAt(unsigned long long i) { return (dynamic_cast<Armor*>(EquippedArmor[i])); }
+	EquipmentDelegate* getEquippedArmorAt(unsigned long long i) { 
+		if (!EquippedArmor[i]) return nullptr; 
+		return (dynamic_cast<Armor*>(EquippedArmor[i]->_data)); 
+	}
 
-	EquipmentDelegate* getEquippedWeaponAt(unsigned long long i) { return (dynamic_cast<Weapon*>(EquippedWeapons[i])); }
+	EquipmentDelegate* getEquippedWeaponAt(unsigned long long i) { 
+		if (!EquippedWeapons[i]) return nullptr; 
+		return (dynamic_cast<Weapon*>(EquippedWeapons[i]->_data)); 
+	}
 
 	//Mutators
 	void gainExp(t_exp amt) { pcclass->gainExp(amt); }

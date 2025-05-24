@@ -2,39 +2,26 @@
 #include "playercharacter.h"
 #include "item_manager.h"
 int main() {
-	const int n = 2;
+	const int n = 1;
 	PlayerCharacter p1(new Warrior());
 	PlayerCharacter p2(new Warrior());
 	PlayerCharacter p3(new Wizard());
 	PlayerCharacter p4(new Rogue());
 	PlayerCharacter p5(new Cleric());
-	PlayerCharacter* ps[n] = { &p1, &p2 };//, &p3, &p4, &p5 };
+	PlayerCharacter* ps[n] = { &p1 };//, &p2 &p3, &p4, &p5 };
 
 
 	//armor stuff
 	CoreStats plate_armor_stats(0, 0, 0, 5, 3);
-	Item* FullPlateMail = ItemManager::createArmor("Shiny Plate Armor", plate_armor_stats, ARMORSLOT::CHEST);
-	if (p1.Equip(FullPlateMail))
-		std::cout << "equip success!\n";
-	else
-		std::cout << "equip failed!\n";
+	Item* FullPlateMail = ItemManager::CreateArmor("Shiny Plate Armor", CoreStats(0, 0, 0, 5, 3), ARMORSLOT::CHEST);
+	Item* LeatherArmor = ItemManager::CreateArmor("Leather Armor", CoreStats(0, 0, 0, 2, 1), ARMORSLOT::CHEST);
 
-	CoreStats leather_helm_stats(0, 0, 0, 1, 1);
-	Item* LeatherHelm = ItemManager::createArmor("Plain Leather Helmet", leather_helm_stats, ARMORSLOT::HELMET);
-	if (p2.Equip(LeatherHelm))
-		std::cout << "equip success!\n";
-	else
-		std::cout << "equip failed!\n";
-
-	Item* LongSword = ItemManager::createWeapon("Long Sword", CoreStats(), WEAPONSLOT::MELEE, 3, 9);
-	if (p1.Equip(LongSword))
-		std::cout << "equip success!\n";
-	else
-		std::cout << "equip failed!\n";
-
-	Item* HealPotion = ItemManager::createPotion("Minor Heal Potion", 1u, 5u);
+	Item* LongSword = ItemManager::CreateWeapon("Long Sword", CoreStats(), WEAPONSLOT::MELEE, 3, 9);
 
 
+
+	ItemManager::Equip(FullPlateMail, &p1);
+	ItemManager::Equip(LongSword, &p1);
 
 	for (int j = 0; j < n; j++) {
 		for (int i = 0; i < 2; i++) {
@@ -82,7 +69,7 @@ int main() {
 				const Weapon* tmp = dynamic_cast<Weapon*>(ps[j]->getEquippedWeaponAt(i));
 
 				if (tmp) {
-					std::cout << " " << tmp->Name << ", D:(" << tmp->minDmg << "-" << tmp->maxDmg << ")\n";
+					std::cout << " " << tmp->Name << ", D:(" << tmp->MinDamage << "-" << tmp->MaxDamage << ")\n";
 				}
 			}
 
@@ -91,23 +78,50 @@ int main() {
 			std::cout << '\n';
 			if (i < 1) {
 				ps[j]->gainExp(100u);
-				if (j == 1) {
-					ArmorBuff arm_buff("StoneShield", 10, 5);
-					StrengthBuff str_debuff("Weakness", 10, -2);
-					ps[j]->applyBuff(str_debuff);
-					ps[j]->applyBuff(arm_buff);
-				}
+
+				ArmorBuff arm_buff("StoneShield", 10, 5);
+				StrengthBuff str_debuff("Weakness", 10, -2);
+				ps[j]->applyBuff(str_debuff);
+				ps[j]->applyBuff(arm_buff);
+				
+				ItemManager::Equip(LeatherArmor, &p1);
 			}
-
-			ps[j]->takeDamage(4);
-			std::cout << "Ouch! Before healing!" << "-HP: " << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
-			if (ps[j]->Use(HealPotion))
-				std::cout << "Healed!" << ps[j]->getCurrentHP() << '/' << ps[j]->getMaxHP() << '\n';
-			else
-				std::cout << "heal failed!\n";
-
 		}
 	}
+	std::cout << "health before taking damage: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
+	p1.takeDamage(20);
+	std::cout << "health after taking damage: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
+	Item* HealPotion = ItemManager::CreatePotion("Minor Heal Potion", 3u, 3u);
+	ItemManager::MoveToBackpack(HealPotion, &p1);
+	ItemManager::Use(HealPotion, &p1);
+	std::cout << "health after using potion: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
+
+	ItemManager::MoveToBackpack(
+		ItemManager::CreateWeapon("Rusty Hand Axe", CoreStats(), WEAPONSLOT::MELEE, 2, 4),
+		&p1);
+
+	{
+		auto inv = p1.getBackpackList();
+		std::cout << "Inventory: ";
+		for (auto it : inv) {
+			std::cout << *it << ", ";
+		}
+
+		ItemManager::Use(HealPotion, &p1);
+		ItemManager::Use(HealPotion, &p1);
+	}
+	std::cout << '\n';
+	std::cout << "health after using 2 potions: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
+
+	{
+		auto inv = p1.getBackpackList();
+		std::cout << "Inventory (after using potions): ";
+		for (auto it : inv) {
+			std::cout << *it << ", ";
+		}
+	}
+
+	std::cout << "\n----END\n\n\n\n";
 
 
 
