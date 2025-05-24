@@ -6,8 +6,8 @@ Buff::Buff() {
 	Modifiers = CoreStats();
 }
 
-Buff::Buff(const char* name, uint16_t dur, t_stat str, t_stat inte, t_stat agi, t_stat arm, t_stat res)
-	: Name(name), Duration(dur), Modifiers(str, inte, agi, arm, res) {
+Buff::Buff(const char* name, t_stat str, t_stat inte, t_stat agi, t_stat arm, t_stat res, uint16_t dur)
+	: Name(name), Modifiers(str, inte, agi, arm, res), Duration(dur) {
 }
 
 Buff::Buff(const char* name, CoreStats cs, uint16_t dur): Name(name), Duration(dur) {

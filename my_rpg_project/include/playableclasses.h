@@ -5,6 +5,9 @@
 //las macros no entienden new lines, de ahí poner los backslashes
 #define LEVELUP \
 HP->AddMax((t_pw)(BASEHP / 2.f), restore);\
+if (MP) {\
+  MP->AddMax((t_pw)(BASEMP / 2.f), restore);\
+}\
 increase_stats((t_stat)((BASESTR + 1u) / 2.f), (t_stat)((BASEINT + 1u) / 2.f), (t_stat)((BASEAGI + 1u) / 2.f));\
 
 
@@ -20,7 +23,7 @@ increase_stats((t_stat)((BASESTR + 1u) / 2.f), (t_stat)((BASEINT + 1u) / 2.f), (
 class Warrior : public PlayerCharacterDelegate {
 public:
 	CHARACTERDEF(18, 0, 5, 2, 2, true)
-	Warrior();
+		Warrior();
 private:
 	void level_char_up() noexcept override;
 };
@@ -28,7 +31,7 @@ private:
 class Cleric : public PlayerCharacterDelegate {
 public:
 	CHARACTERDEF(14, 10, 3, 5, 1, true)
-	Cleric();
+		Cleric();
 private:
 	void level_char_up() noexcept override;
 };
@@ -36,7 +39,7 @@ private:
 class Wizard : public PlayerCharacterDelegate {
 public:
 	CHARACTERDEF(10, 14, 1, 8, 1, false)
-	Wizard();
+		Wizard();
 private:
 	void level_char_up() noexcept override;
 };
@@ -44,7 +47,7 @@ private:
 class Rogue : public PlayerCharacterDelegate {
 public:
 	CHARACTERDEF(12, 0, 3, 3, 5, false)
-	Rogue();
+		Rogue();
 private:
 	void level_char_up() noexcept override;
 };

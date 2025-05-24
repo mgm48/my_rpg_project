@@ -10,7 +10,6 @@ public:
 protected:
 	virtual ~ItemDelegate() = 0 {}
 	ItemDelegate(std::string name) : Name(name) {}
-
 	friend class Item;
 };
 
@@ -27,42 +26,28 @@ private:
 
 class Potion : public ItemDelegate {
 public:
-	Buff* Effect;
 	t_pw HealAmount;
 	item_count Quantity;
-
-	~Potion() {
-		if (Effect) {
-			delete Effect;
-			Effect = nullptr;
-		}
-	}
-
+	const Buff* GetBuff() const;
+	void SetBuff(Buff* new_buff);
+	
 private: 
-	Potion(std::string name, t_pw Heal = 1u, item_count q = 1, Buff* b = nullptr) 
-		: ItemDelegate(name), HealAmount(Heal), Quantity(q), Effect(b) {
-	}
-
+	Buff* _buff;
+	Potion(std::string name, t_pw hp_heal = 1u, item_count q = 1, Buff* b = nullptr);
+	~Potion();
 	friend class ItemManager;
 };
 
-
-
-
-enum class ARMORSLOT { HELMET, CHEST, LEGS, BOOTS, GLOVES, RING1, RING2, NECK, NUM_SLOTS };  // NUM SLOTS FOR MAKING ARRAYS OF ARMOR SLOTS
+enum class ARMORSLOT { HEAD, CHEST, LEGS, FEET, HANDS, RING1, RING2, NECK, NUM_SLOTS };  // NUM SLOTS FOR MAKING ARRAYS OF ARMOR SLOTS
 class Armor final : public EquipmentDelegate {
 public:
 	ARMORSLOT Slot;
-
-	
-
 private:
-	Armor(std::string name, CoreStats cstats, ARMORSLOT slot) : EquipmentDelegate(name, cstats), Slot(slot) {}
-
+	Armor(std::string name, CoreStats cstats, ARMORSLOT slot);
 	Armor() = delete; //so no one can use a default empty constructor
 	Armor(const Armor&) = delete;
 	Armor(const Armor&&) = delete;	
-
+	~Armor(); // only ItemManger can clean this up
 	friend class ItemManager;
 };
 
@@ -73,17 +58,12 @@ public:
 	t_dmg MinDamage;
 	t_dmg MaxDamage;
 	bool is2H; //twohander vs onehander
-
-
 private:
-	Weapon(std::string name, CoreStats stats, WEAPONSLOT slot, t_dmg mind, t_dmg maxd, bool hands = false) : 
-		EquipmentDelegate(name, stats), Slot(slot), MinDamage(mind), MaxDamage(maxd), is2H(hands) {
-	}
-
+	Weapon(std::string name, CoreStats stats, WEAPONSLOT slot, t_dmg mind, t_dmg maxd, bool hands = false);
 	Weapon() = delete; //so no one can use a default empty constructor
 	Weapon(const Weapon&) = delete;  //no copying
 	Weapon(const Weapon&&) = delete; //no moving an object into this one
-
+	~Weapon();  // only ItemManger can clean this up
 	friend class ItemManager;
 };
 
@@ -105,7 +85,6 @@ private:
 	ItemDelegate* _data; //we need to instatiate this at runtime, also private so it cant getchanged
 	bool marked_for_deletion = false;
 	Item(ItemDelegate* item) : _data(item) {}
-
 	friend class ItemManager; //friend clases can instantiate this class
 	friend class PlayerCharacter;
 

@@ -87,6 +87,9 @@ bool ItemManager::Equip(Item* thing, PlayerCharacter* p_char) {
 		return true;
 	}
 
+	// if item fails to equip, move it to the characters backpack
+	MoveToBackpack(thing, p_char);
+
 	return false;
 }
 
@@ -97,12 +100,12 @@ bool ItemManager::Use(Item* thing, PlayerCharacter* p_char) {
 	Potion* potion = dynamic_cast<Potion*>(thing->_data);
 	if (potion) {
 
-		if (potion->Effect) {
-			p_char->ApplyBuff(*potion->Effect);
+		if (potion->_buff) {
+			p_char->ApplyBuff(*potion->_buff);
 		}
 
 		// if max health and trying to use a heal potion, don't use itS
-		if (p_char->_player_class->HP->IsFull() && !potion->Effect)
+		if (p_char->_player_class->HP->IsFull() && !potion->_buff)
 			return false; // don't use the potion
 
 		//if (potion->HealAmount > 0)
