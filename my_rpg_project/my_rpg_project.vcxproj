@@ -135,15 +135,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="items.cpp" />
+    <ClCompile Include="ability.cpp" />
+    <ClCompile Include="buff.cpp" />
+    <ClCompile Include="corestats.cpp" />
+    <ClCompile Include="playableclasses.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="playercharacter.cpp" />
+    <ClCompile Include="pointwell.cpp" />
+    <ClCompile Include="stats.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\abilities.h" />
-    <ClInclude Include="include\buffs.h" />
+    <ClInclude Include="include\ability.h" />
+    <ClInclude Include="include\buff.h" />
     <ClInclude Include="include\corestats.h" />
-    <ClInclude Include="include\items.h" />
+    <ClInclude Include="include\item.h" />
     <ClInclude Include="include\item_manager.h" />
+    <ClInclude Include="include\playableclasses.h" />
     <ClInclude Include="include\playercharacter.h" />
     <ClInclude Include="include\pointwell.h" />
     <ClInclude Include="include\stats.h" />

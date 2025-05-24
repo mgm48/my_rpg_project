@@ -18,15 +18,39 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="items.cpp">
+    <ClCompile Include="item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="item_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="playercharacter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ability.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="buff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="corestats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pointwell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="playableclasses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\abilities.h">
+    <ClInclude Include="include\ability.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\buffs.h">
+    <ClInclude Include="include\buff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\corestats.h">
@@ -35,7 +59,7 @@
     <ClInclude Include="include\item_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\items.h">
+    <ClInclude Include="include\item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\playercharacter.h">
@@ -48,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\playableclasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

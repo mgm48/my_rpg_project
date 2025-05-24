@@ -1,9 +1,10 @@
 #pragma once
 #include "stats.h"
 #include "pointwell.h"
-#include "abilities.h"
-#include "items.h"
+#include "ability.h"
+#include "item.h"
 #include "types.h"
+#include "item_manager.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -13,270 +14,83 @@
 class PlayerCharacterDelegate : public Stats { // delegate is a pure abstract class
 public:
 	static const t_exp LEVEL2AT = 100u;
-	static const bool restore = true;
-	static const bool norest = false;
-	
-	PlayerCharacterDelegate() : Stats() {
-		CurrentLevel = 1u;
-		CurrentExp = 0u;
-		ExpToNextLevel = LEVEL2AT;
-		HP = std::make_unique<PointWell>();
-	}
-	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi) : Stats(str, in, agi) {
-		CurrentLevel = (t_level)1u;
-		CurrentExp = (t_exp)0u;
-		ExpToNextLevel = LEVEL2AT;
-		HP = std::make_unique<PointWell>(bhp);
-	}
-
-	void gainExp(t_exp gained_exp) {
-		CurrentExp += gained_exp;
-		while (check_if_leveled()) {}
-	}
-	void applyBuff(Buff b) { addNewBuff(b); }
-
-	std::vector<Buff> getBuffList() { return Buffs; }
-
-	t_level getLevel() { return CurrentLevel; }
-	t_exp getCurrentExp() { return CurrentExp; }
-	t_exp getExpToNextLevel() { return ExpToNextLevel; }
-
-	virtual void LevelUp() = 0;
-	virtual std::string getClassName() = 0;
-
+	PlayerCharacterDelegate();
+	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi);
+	virtual ~PlayerCharacterDelegate() = 0;
+	[[nodiscard]] t_level GetLevel() const noexcept;
+	[[nodiscard]] t_exp GetCurrentExp() const noexcept;
+	[[nodiscard]] t_exp GetExpToNextLevel() const noexcept;
+	void GiveExp(const t_exp gained_exp) noexcept;
 	std::unique_ptr<PointWell> HP;
 	std::unique_ptr<PointWell> MP;
-
 	std::vector<Ability> Abilities;
 
+	void ApplyBuff(Buff b) { add_buff(b); }
+	std::vector<Buff> GetBuffList() { return Buffs; }
 protected:
-	t_level CurrentLevel;
-	t_exp CurrentExp;
-	t_exp ExpToNextLevel;
-
-	bool check_if_leveled() {
-		static const t_level LEVELSCALAR = 2u;
-		if (CurrentExp >= ExpToNextLevel) {
-			CurrentLevel++;
-			LevelUp();
-			ExpToNextLevel *= LEVELSCALAR;
-			return true;
-		}
-		return false;
-	}
-};
-//las macros no entienden new lines, de ahí poner los backslashes
-#define PCCONSTRUCT \
-HP->setMax(BASEHP);\
-HP->addCur(BASEHP);\
-if (MP) { \
-  MP->setMax(BASEMP); \
-  MP->addCur(BASEMP); \
-}\
-increaseStats(BASESTR, BASEINT, BASEAGI);\
-
-
-#define LEVELUP \
-HP->addMax((t_pw)(BASEHP / 2.f), restore);\
-increaseStats((t_stat)((BASESTR + 1u) / 2.f), (t_stat)((BASEINT + 1u) / 2.f), (t_stat)((BASEAGI + 1u) / 2.f));\
-
-
-#define CHARACTERDEF(basehp, basemp, basestr, baseint, baseagi, rest)\
-	static const bool restore = rest;\
-	static const t_pw BASEHP = (t_pw)basehp;\
-	static const t_pw BASEMP = (t_pw)basemp;\
-	static const t_stat BASESTR = (t_stat)basestr;\
-	static const t_stat BASEINT = (t_stat)baseint;\
-	static const t_stat BASEAGI = (t_stat)baseagi;\
-
-
-class Warrior : public PlayerCharacterDelegate {
-public:
-	CHARACTERDEF( 18, 0, 5, 2, 2, restore)
-
-	std::string getClassName() override { return std::string("Warrior"); }
-
-	Warrior() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
-		//PCCONSTRUCT
-	}
-
 private:
-	void LevelUp() override {
-		LEVELUP
-		if (CurrentLevel == 2) {
-			Abilities.emplace_back("PowerAttack", 0u, 3u, ABILITYTARGET::ENEMY, 4u, ABILITYSCALER::STR);
-		}
-	}
+	t_exp _current_exp;
+	t_exp _exp_to_next_level;
+	virtual void level_char_up() = 0;
+	t_level _current_level;
+	[[nodiscard]] const bool check_if_leveled() noexcept; 
 };
 
-class Cleric : public PlayerCharacterDelegate {
+
+
+class PlayerCharacter final {
 public:
-
-	CHARACTERDEF( 14, 10, 3, 5, 1, restore)
-
-	std::string getClassName() override { return std::string("Cleric"); }
-	
-	Cleric() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
-		MP = std::make_unique<PointWell>(BASEMP);
-		Abilities.emplace_back("Heal",2u,1u,ABILITYTARGET::ALLY, 2u, ABILITYSCALER::INT);
-		//PCCONSTRUCT
-	}
-private:
-	void LevelUp() override {
-		LEVELUP
-		if (CurrentLevel == 2) {
-			Abilities.emplace_back("Smite", 2u, 1u, ABILITYTARGET::ENEMY, 2u, ABILITYSCALER::INT);
-		}
-	}
-};
-
-class Wizard : public PlayerCharacterDelegate {
-public:
-	CHARACTERDEF( 10, 14, 1, 8, 1, norest)
-
-
-	std::string getClassName() override { return std::string("Wizard"); }
-
-	Wizard() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
-		MP = std::make_unique<PointWell>(BASEMP);
-		Abilities.emplace_back("Firebolt", 2u, 1u, ABILITYTARGET::ENEMY, 4u, ABILITYSCALER::INT);
-		//PCCONSTRUCT
-	}
-private:
-	void LevelUp() override {
-		LEVELUP
-			MP->addMax(1u, true);
-	}
-};
-
-class Rogue : public PlayerCharacterDelegate {
-public:
-	CHARACTERDEF(12, 0, 3, 3, 5, norest)
-
-	std::string getClassName() override { return std::string("Rogue"); }
-
-	Rogue() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
-		//PCCONSTRUCT
-	}
-private:
-	void LevelUp() override {
-		LEVELUP
-		if (CurrentLevel == 2) {
-			Abilities.emplace_back("PreciseAttack", 0u, 3u, ABILITYTARGET::ENEMY, 6u, ABILITYSCALER::AGI);
-		}
-	}
-};
-
-class PlayerCharacter {
-private: 
-	PlayerCharacterDelegate* pcclass;
-	Item* EquippedArmor[(unsigned long long)ARMORSLOT::NUM_SLOTS]; //the array wants unsigned long long
-	Item* EquippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
-	CoreStats EquipmentModifier;
-	std::vector<Item*> Backpack;
-	void cleanup_backpack() { //to be refactored
-		//stable partition puts everything that has the condition at the start, and the iterator is to the first marked for deletion item
-		const auto to_remove = std::stable_partition(Backpack.begin(), Backpack.end(), //returns iterator
-			[](const Item* i) -> bool {return !i->isMarkedForDeletion(); }); //lambda funtion
-
-		std::for_each(to_remove, Backpack.end(), [](Item* i) {delete i; });
-
-		Backpack.erase(to_remove, Backpack.end());
-	}
-
-	friend class ItemManager;
-
-public:
-	PlayerCharacter(PlayerCharacterDelegate* pc) : pcclass(pc), EquipmentModifier(0,0,0,0,0) {
-		auto i = 0;
-		for (i = 0; i < (unsigned long long)ARMORSLOT::NUM_SLOTS; i++) {
-			EquippedArmor[i] = nullptr;
-		}
-		for (i = 0; i < (unsigned long long)WEAPONSLOT::NUM_SLOTS; i++) {
-			EquippedWeapons[i] = nullptr;
-		}
-	}
-	~PlayerCharacter() {
-		delete pcclass;
-		pcclass = nullptr;
-		auto i = 0;
-		for (i = 0; i < (unsigned long long)ARMORSLOT::NUM_SLOTS; i++) {
-			if (EquippedArmor[i]) {
-				delete EquippedArmor[i];
-				EquippedArmor[i] = nullptr;
-			}
-		}
-		for (i = 0; i < (unsigned long long)WEAPONSLOT::NUM_SLOTS; i++) {
-			if (EquippedWeapons[i]) {
-				delete EquippedWeapons[i];
-				EquippedWeapons[i] = nullptr;
-			}
-		}
-	}
+	PlayerCharacter(PlayerCharacterDelegate* pc);
+	~PlayerCharacter();
 
 	//Getters
-	std::string getClassName() const { return pcclass->getClassName(); }
-	t_level getLevel() const { return pcclass->getLevel(); }
-	t_exp getCurrentExp() const { return pcclass->getCurrentExp(); }
-	t_exp getExpToNextLevel() const { return pcclass->getExpToNextLevel(); }
-	t_pw getMaxHP() const { return pcclass->HP->getMax(); }
-	t_pw getCurrentHP() const { return pcclass->HP->getCurrent(); }
-	t_pw getCurrentMP() const  {
-		if (pcclass->MP)
-			return pcclass->MP->getCurrent();
-		else
-			return 0;
-	}
-	t_pw getMaxMP() const  {
-		if (pcclass->MP)
-			return pcclass->MP->getMax();
-		else
-			return 0;
-	}
-	t_stat getStrength() const { return pcclass->getStrength(); }
-	t_stat getIntellect() const { return pcclass->getIntellect(); }
-	t_stat getAgility() const { return pcclass->getAgility(); }
-	t_stat getArmor() const { return pcclass->getArmor(); }
-	t_stat getElementRes() const { return pcclass->getElementRes(); }
+	[[nodiscard]] const t_level GetLevel() const noexcept;
+	[[nodiscard]] const t_exp GetCurrentExp() const noexcept;
+	[[nodiscard]] const t_exp GetExpToNextLevel() const noexcept;
 
-	t_stat getStrengthModifier() const { return pcclass->getStrengthModifier(); }
-	t_stat getIntellectModifier() const { return pcclass->getIntellectModifier(); }
-	t_stat getAgilityModifier() const { return pcclass->getAgilityModifier(); }
-	t_stat getArmorModifier() const { return pcclass->getArmorModifier(); }
-	t_stat getElementResModifier() const { return pcclass->getElementResModifier(); }
+	[[nodiscard]] const bool IsMaxHP() const noexcept;
+	[[nodiscard]] const t_pw GetMaxHP() const noexcept;
+	[[nodiscard]] const t_pw GetCurrentHP() const noexcept;
+	[[nodiscard]] const t_pw GetCurrentMP() const noexcept;
+	[[nodiscard]] const t_pw GetMaxMP() const noexcept;
 
-	t_stat getTotalStrength() const { return pcclass->getTotalStrength() + EquipmentModifier.Strength; }
-	t_stat getTotalIntellect() const { return pcclass->getTotalIntellect() + EquipmentModifier.Intellect; }
-	t_stat getTotalAgility() const { return pcclass->getTotalAgility() + EquipmentModifier.Agility; }
-	t_stat getTotalArmor() const { return pcclass->getTotalArmor() + EquipmentModifier.Armor; }
-	t_stat getTotalElementRes() const { return pcclass->getTotalElementRes() + EquipmentModifier.ElementRes; }
+	[[nodiscard]] const t_stat GetStrength() const noexcept;
+	[[nodiscard]] const t_stat GetIntellect() const noexcept;
+	[[nodiscard]] const t_stat GetAgility() const noexcept;
+	[[nodiscard]] const t_stat GetArmor() const noexcept;
+	[[nodiscard]] const t_stat GetElementRes() const noexcept;
 
-	const std::vector<Ability> getAbilityList() const { return pcclass->Abilities; }
-	const std::vector<Buff> getBuffList() const { return pcclass->getBuffList(); }
-	const std::vector<Item*> getBackpackList() const { return Backpack; }
+	[[nodiscard]] const t_stat GetTotalStrength() const noexcept;
+	[[nodiscard]] const t_stat GetTotalIntellect() const noexcept;
+	[[nodiscard]] const t_stat GetTotalAgility() const noexcept;
+	[[nodiscard]] const t_stat GetTotalArmor() const noexcept;
+	[[nodiscard]] const t_stat GetTotalElementRes() const noexcept;
 
-	EquipmentDelegate* getEquippedArmorAt(unsigned long long i) { 
-		if (!EquippedArmor[i]) return nullptr; 
-		return (dynamic_cast<Armor*>(EquippedArmor[i]->_data)); 
-	}
+	[[nodiscard]] const std::vector<Ability> GetAbilityList() const noexcept;
+	[[nodiscard]] const std::vector<Buff> GetBuffList() const noexcept;
+	[[nodiscard]] const std::vector<Item*> GetBackpackList() const noexcept;
 
-	EquipmentDelegate* getEquippedWeaponAt(unsigned long long i) { 
-		if (!EquippedWeapons[i]) return nullptr; 
-		return (dynamic_cast<Weapon*>(EquippedWeapons[i]->_data)); 
-	}
+	[[nodiscard]] const EquipmentDelegate* GetEquippedArmorAt(unsigned long long i) noexcept;
+	[[nodiscard]] const EquipmentDelegate* GetEquippedWeaponAt(unsigned long long i) noexcept;
 
 	//Mutators
-	void gainExp(t_exp amt) { pcclass->gainExp(amt); }
-	void takeDamage(t_pw dmg) { pcclass->HP->subCur(dmg); }
-	void heal(t_pw hl) { pcclass->HP->addCur(hl); }
-
-	void applyBuff(Buff buff) {
-		pcclass->applyBuff(buff);
-	}
+	void GiveExp(t_exp amt) noexcept;
+	void TakeDamage(t_pw dmg) noexcept;
+	void Heal(t_pw hl) noexcept;
+	void ApplyBuff(Buff buff) noexcept;
 	
 private:
+	PlayerCharacterDelegate* _player_class;
+	std::vector<Item*> _backpack;
 
-	// deleted constructors
+	Item* _equipped_armor[(unsigned long long)ARMORSLOT::NUM_SLOTS]; //the array wants unsigned long long
+	Item* _equipped_weapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
+	CoreStats _equip_modifier;
+
+	void move_to_backpack(Item* item_to_move) noexcept;
+	void cleanup_backpack() noexcept;
+	friend class ItemManager;
+
 	PlayerCharacter() = delete;
 	PlayerCharacter(const PlayerCharacter&) = delete;
 	PlayerCharacter(const PlayerCharacter&&) = delete;
