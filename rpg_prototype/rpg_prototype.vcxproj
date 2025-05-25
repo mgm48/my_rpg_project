@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6c570b9c-3dbd-45c5-8fbc-77bb959fd1a2}</ProjectGuid>
-    <RootNamespace>myrpgproject</RootNamespace>
+    <ProjectGuid>{fa338019-d81b-4dea-881d-f01b903d048c}</ProjectGuid>
+    <RootNamespace>rpgprototype</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)my_rpg_project\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)my_rpg_project\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)my_rpg_project\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)my_rpg_project\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,31 +135,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ability.cpp" />
-    <ClCompile Include="buff.cpp" />
-    <ClCompile Include="corestats.cpp" />
-    <ClCompile Include="monster.cpp" />
-    <ClCompile Include="playableclasses.cpp" />
-    <ClCompile Include="item.cpp" />
-    <ClCompile Include="item_manager.cpp" />
-    <ClCompile Include="playercharacter.cpp" />
-    <ClCompile Include="pointwell.cpp" />
-    <ClCompile Include="random.cpp" />
-    <ClCompile Include="stats.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ability.h" />
-    <ClInclude Include="include\buff.h" />
-    <ClInclude Include="include\corestats.h" />
-    <ClInclude Include="include\item.h" />
-    <ClInclude Include="include\item_manager.h" />
-    <ClInclude Include="include\playableclasses.h" />
-    <ClInclude Include="include\playercharacter.h" />
-    <ClInclude Include="include\pointwell.h" />
-    <ClInclude Include="include\stats.h" />
-    <ClInclude Include="include\types.h" />
-    <ClInclude Include="include\monster.h" />
-    <ClInclude Include="include\random.h" />
+    <ProjectReference Include="..\my_rpg_project\my_rpg_project.vcxproj">
+      <Project>{6c570b9c-3dbd-45c5-8fbc-77bb959fd1a2}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

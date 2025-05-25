@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "playercharacter.h"
-#include "item_manager.h"
-#include "types.h"
-#include "playableclasses.h"
-#include <monster.h>
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

@@ -8,5 +8,14 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
-
+#include "playercharacter.h"
+#include "item_manager.h"
+//#include "types.h"
+#include "item.h"
+#include "ability.h"
+#include "buff.h"
+#include "stats.h"
+#include "corestats.h"
+#include "playableclasses.h"
+#include "monster.h"
 #endif //PCH_H
