@@ -8,6 +8,9 @@ void Warrior::level_char_up() noexcept {
 		if (GetLevel() == 2) {
 			Abilities.emplace_back("PowerAttack", 0u, 3u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::STR);
 		}
+		else if (GetLevel() == 4){
+			Abilities.emplace_back("Healing Surge", 0u, 4u, 4u, nullptr,  ABILITYTARGET::SELF, ABILITYSCALER::NONE);
+		}
 }
 
 //CLERIC
