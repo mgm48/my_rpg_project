@@ -43,7 +43,7 @@ void CoreStats::reset() {
 	this->Armor = 0;
 	this->ElementRes = 0;
 }
-
+const bool CoreStats::any() const noexcept { return Strength != 0 || Intellect != 0 || Agility != 0 || Armor != 0 || ElementRes != 0; }
 
 CoreStats& CoreStats::operator+=(const CoreStats& rhs) {
 	this->Strength += rhs.Strength;
@@ -68,4 +68,15 @@ CoreStats& CoreStats::operator=(const t_stat& rhs) { //igualar a un solo stat
 	this->Armor = rhs;
 	this->ElementRes = rhs;
 	return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const CoreStats& cs) {
+	os << "[ ";
+	if (cs.Strength != 0) { os << ((cs.Strength > 0) ? "+" : "") << cs.Strength << " str "; }
+	if (cs.Intellect != 0) { os << ((cs.Intellect > 0) ? "+" : "") << cs.Intellect << " int "; }
+	if (cs.Agility != 0) { os << ((cs.Agility > 0) ? "+" : "") << cs.Agility << " agi "; }
+	if (cs.Armor != 0) { os << ((cs.Armor > 0) ? "+" : "") << cs.Armor << " arm "; }
+	if (cs.ElementRes != 0) { os << ((cs.ElementRes > 0) ? "+" : "") << cs.ElementRes << " res "; }
+	os << "]";
+	return os;
 }

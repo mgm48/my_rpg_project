@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include <iostream>
 
 
 struct CoreStats {
@@ -18,10 +19,11 @@ struct CoreStats {
 	void add(t_stat str = 0, t_stat inte = 0, t_stat agi = 0, t_stat arm = 0, t_stat res = 0);
 	void remove(t_stat str = 0, t_stat inte = 0, t_stat agi = 0, t_stat arm = 0, t_stat res = 0);
 	void reset();
+	const bool any() const noexcept;
 
 	CoreStats& operator+=(const CoreStats& rhs);
 	CoreStats& operator-=(const CoreStats& rhs);
 	CoreStats& operator=(const t_stat& rhs);
 
-	
+	friend std::ostream& operator<<(std::ostream& os, const CoreStats& cs);
 };

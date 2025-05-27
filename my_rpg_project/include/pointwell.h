@@ -11,7 +11,7 @@ public:
 	void AddMax(t_pw add_max, bool restore = true) noexcept;
 	void SubCur(t_pw damage) noexcept;
 	void AddCur(t_pw amount) noexcept;
-
+	void ModCur(t_pw amt) noexcept;
 	//getters
 	[[nodiscard]] const t_pw GetCurrent() const noexcept;
 	[[nodiscard]] const t_pw GetMax() const noexcept;

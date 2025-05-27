@@ -2,7 +2,7 @@
 #include <cstdint>
 
 typedef std::int16_t t_stat;
-typedef std::uint16_t t_pw;
+typedef std::int16_t t_pw;
 typedef std::uint16_t t_dmg;
 typedef std::uint16_t item_count;
 

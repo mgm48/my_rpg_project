@@ -17,6 +17,7 @@ public:
 	PlayerCharacterDelegate();
 	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi);
 	virtual ~PlayerCharacterDelegate() = 0;
+	virtual const char* GetClass() = 0;
 	[[nodiscard]] t_level GetLevel() const noexcept;
 	[[nodiscard]] t_exp GetCurrentExp() const noexcept;
 	[[nodiscard]] t_exp GetExpToNextLevel() const noexcept;
@@ -44,6 +45,7 @@ public:
 	~PlayerCharacter();
 
 	//Getters
+	[[nodiscard]] const char* GetClass() const noexcept;
 	[[nodiscard]] const t_level GetLevel() const noexcept;
 	[[nodiscard]] const t_exp GetCurrentExp() const noexcept;
 	[[nodiscard]] const t_exp GetExpToNextLevel() const noexcept;
@@ -51,6 +53,7 @@ public:
 	[[nodiscard]] const bool IsMaxHP() const noexcept;
 	[[nodiscard]] const t_pw GetMaxHP() const noexcept;
 	[[nodiscard]] const t_pw GetCurrentHP() const noexcept;
+	[[nodiscard]] const bool IsMagicUser() const noexcept;
 	[[nodiscard]] const t_pw GetCurrentMP() const noexcept;
 	[[nodiscard]] const t_pw GetMaxMP() const noexcept;
 
@@ -70,15 +73,17 @@ public:
 	[[nodiscard]] const std::vector<Buff> GetBuffList() const noexcept;
 	[[nodiscard]] const std::vector<Item*> GetBackpackList() const noexcept;
 
-	[[nodiscard]] const EquipmentDelegate* GetEquippedArmorAt(unsigned long long i) noexcept;
-	[[nodiscard]] const EquipmentDelegate* GetEquippedWeaponAt(unsigned long long i) noexcept;
+	[[nodiscard]] const Armor* GetEquippedArmorAt(unsigned long long i) noexcept;
+	[[nodiscard]] const Weapon* GetEquippedWeaponAt(unsigned long long i) noexcept;
 
+	const int Defend(t_dmg damage) const noexcept;
 	const t_dmg MeleeAttack() const noexcept;
 	const t_dmg RangedAttack() const noexcept;
 
 	//Mutators
 	void GiveExp(t_exp amt) noexcept;
 	void TakeDamage(t_pw dmg) noexcept;
+	void HealthModify(t_pw amt) noexcept;
 	void Heal(t_pw hl) noexcept;
 	void ApplyBuff(Buff buff) noexcept;
 	

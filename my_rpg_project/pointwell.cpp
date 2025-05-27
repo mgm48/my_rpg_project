@@ -13,36 +13,37 @@ PointWell::PointWell(t_pw currP, t_pw maxP) {
 	_max_well = maxP;
 }
 
-bool PointWell::SetMax(t_pw new_max) noexcept {
+bool PointWell::SetMax(t_pw new_max) noexcept { //sets a new max and current becomes max as well
 	if (new_max < 0)
 		return false;
 
 	_max_well = new_max;
 
-	if (_current_fullness > _max_well)
+	if (_current_fullness != _max_well)
 		_current_fullness = _max_well;
 
 	return true;
 }
 void PointWell::AddMax(t_pw add_max, bool restore) noexcept {
-	if (add_max > 0) {
-		_max_well += add_max;
-	}
-	if (restore && _current_fullness < _max_well)
+	_max_well += add_max;
+	if ((restore && _current_fullness < _max_well) || (_current_fullness > _max_well))
 		_current_fullness = _max_well;
 }
 
-void PointWell::SubCur(t_pw damage) noexcept {
-	if (damage > _current_fullness)
-		_current_fullness = 0;
-	else
-		_current_fullness -= damage;
+void PointWell::SubCur(t_pw amount) noexcept { 
+	_current_fullness -= amount;
+	if (_current_fullness > _max_well) { _current_fullness = _max_well; }
+	if (_current_fullness < 0) { _current_fullness = 0; }
 }
-void PointWell::AddCur(t_pw amount) noexcept {
-	if (amount + _current_fullness > _max_well)
-		_current_fullness = _max_well;
-	else
-		_current_fullness += amount;
+void PointWell::AddCur(t_pw amount) noexcept { 
+	_current_fullness += amount;
+	if (_current_fullness > _max_well) { _current_fullness = _max_well; }
+	if (_current_fullness < 0) { _current_fullness = 0; }
+}
+void PointWell::ModCur(t_pw amt) noexcept { //never becomes 0
+	_current_fullness += amt;
+	if (_current_fullness < 1) { _current_fullness = 1; }
+	if (_current_fullness > _max_well) { _current_fullness = _max_well; }
 }
 
 //getters

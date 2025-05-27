@@ -2,6 +2,7 @@
 
 //WARRIOR
 Warrior::Warrior() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {}
+const char* Warrior::GetClass() noexcept { return "Warrior"; }
 void Warrior::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
@@ -14,6 +15,7 @@ Cleric::Cleric() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
 	MP = std::make_unique<PointWell>(BASEMP);
 	Abilities.emplace_back("Heal", 2u, 1u, 2u, nullptr, ABILITYTARGET::ALLY, ABILITYSCALER::INT);
 }
+const char* Cleric::GetClass() noexcept { return "Cleric"; }
 void Cleric::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
@@ -26,6 +28,7 @@ Wizard::Wizard() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
 	MP = std::make_unique<PointWell>(BASEMP);
 	Abilities.emplace_back("Firebolt", 2u, 1u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT);
 }
+const char* Wizard::GetClass() noexcept { return "Wizard"; }
 void Wizard::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
@@ -36,6 +39,7 @@ void Wizard::level_char_up() noexcept {
 
 //ROGUE
 Rogue::Rogue() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {}
+const char* Rogue::GetClass() noexcept { return "Rogue"; }
 void Rogue::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {

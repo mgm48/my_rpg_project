@@ -2,6 +2,7 @@
 #include "corestats.h"
 #include "buff.h"
 #include <string>
+//#include <iostream>
 #include <typeinfo>
 
 class ItemDelegate {
@@ -71,7 +72,8 @@ private:
 class Item {
 public:
 	const ItemDelegate* GetData() { return _data; } //const pointer, cant be modified except const cast but thats too much
-	bool isMarkedForDeletion() const { return marked_for_deletion; }
+	bool isMarkedForDeletion() const { return _marked_for_deletion; }
+	bool isMarkedAsBackpackRefGone() const { return _marked_as_backpack_ref_gone; }
 private:
 	~Item() { //to prevent memory leaks 
 		if (_data) {
@@ -80,25 +82,9 @@ private:
 		}
 	}
 	ItemDelegate* _data; //we need to instatiate this at runtime, also private so it cant getchanged
-	bool marked_for_deletion = false;
+	bool _marked_for_deletion = false;
+	bool _marked_as_backpack_ref_gone = false; //has been equipped or moved somewhere else
 	Item(ItemDelegate* item) : _data(item) {}
 	friend class ItemManager; //friend clases can instantiate this class
 	friend class PlayerCharacter;
-
-	//friend std::ostream& operator<<(std::ostream& os, const Item& t) {
-	//	Armor* tmp_cast = dynamic_cast<Armor*>(t._data);
-	//	if (tmp_cast) {
-	//		return os << tmp_cast->Name << "(Armor: " << tmp_cast->Stats.Armor << ", Resist: " << tmp_cast->Stats.ElementRes << ')';
-	//	}
-	//	Weapon* tmp_cast2 = dynamic_cast<Weapon*>(t._data);
-	//	if (tmp_cast2) {
-	//		return  os << tmp_cast2->Name << "(Damage: " << tmp_cast2->MinDamage << '-' << tmp_cast2->MaxDamage << ')';
-	//	}
-	//	Potion* tmp_cast3 = dynamic_cast<Potion*>(t._data);
-	//	if (tmp_cast3) {
-	//		return os << tmp_cast3->Name << '(' << tmp_cast3->Quantity << ')';
-	//	}
-	//	return os;
-	//}
-
 };

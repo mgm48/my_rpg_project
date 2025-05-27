@@ -14,14 +14,22 @@ struct Player {
 	int xpos = 10;
 };
 
+//enum class CLASS { CLERIC, WARRIOR, ROGUE, WIZARD, NUM_CLASSES };
+const char* descriptions[4]{ //so that choice + 1 == descriptions 
+	"just a little innocent cleric",
+	"            A            Brave            Warrior.",
+	"the rascal, the scoundrel, the thief, THEEEE ROGUE",
+	"The prestigious, magnificent Wizard."
+};
+
 struct Fightable {
 	Fightable(int hp, int min, int max) : monster(hp, min, max) {
 		xpworth = (hp + min + max) * 2;
 	}
 	bool IsAlive() { return (monster.HP.GetCurrent() > 0); }
 	Monster monster;
-	int xpos = 3;
-	int ypos = 3;
+	int xpos = 1;
+	int ypos = 1;
 	int xpworth;
 	Fightable() = delete;
 };

@@ -47,8 +47,14 @@ void PlayerCharacter::cleanup_backpack() noexcept { //to be refactored
 	const auto to_remove = std::stable_partition( _backpack.begin(), _backpack.end(), //returns iterator
 		[](const Item* i) -> bool {return !i->isMarkedForDeletion(); } ); //lambda funtion
 
-	std::for_each(to_remove, _backpack.end(), [](Item* i) {ItemManager::DeleteItem(i); });
-	_backpack.erase(to_remove, _backpack.end());
+	std::for_each(to_remove, _backpack.end(), [](Item* i) {ItemManager::DeleteItem(i); }); //deletes the actual items
+	_backpack.erase(to_remove, _backpack.end()); //delete the pointers to the items
+
+
+	const auto to_remove_ref = std::stable_partition(_backpack.begin(), _backpack.end(), 
+		[](const Item* i) -> bool {return !i->isMarkedAsBackpackRefGone(); });
+	_backpack.erase(to_remove_ref, _backpack.end());
+
 }
 
 PlayerCharacter::PlayerCharacter(PlayerCharacterDelegate* pc) : _player_class(pc), _equip_modifier() {
@@ -78,6 +84,8 @@ PlayerCharacter::~PlayerCharacter() {
 	}
 }
 
+[[nodiscard]] const char* PlayerCharacter::GetClass() const noexcept{ return _player_class->GetClass() ;}
+
 [[nodiscard]] const t_level PlayerCharacter::GetLevel() const noexcept { return _player_class->GetLevel(); }
 [[nodiscard]] const t_exp PlayerCharacter::GetCurrentExp() const noexcept { return _player_class->GetCurrentExp(); }
 [[nodiscard]] const t_exp PlayerCharacter::GetExpToNextLevel() const noexcept { return _player_class->GetExpToNextLevel(); }
@@ -85,6 +93,7 @@ PlayerCharacter::~PlayerCharacter() {
 [[nodiscard]] const bool PlayerCharacter::IsMaxHP() const noexcept { return _player_class->HP->IsFull(); }
 [[nodiscard]] const t_pw PlayerCharacter::GetMaxHP() const noexcept { return _player_class->HP->GetMax(); }
 [[nodiscard]] const t_pw PlayerCharacter::GetCurrentHP() const noexcept { return _player_class->HP->GetCurrent(); }
+[[nodiscard]] const bool PlayerCharacter::IsMagicUser() const noexcept { if (_player_class->MP) { return true; } else { return false; } }
 [[nodiscard]] const t_pw PlayerCharacter::GetCurrentMP() const noexcept {
 	if (_player_class->MP)
 		return _player_class->MP->GetCurrent();
@@ -114,42 +123,52 @@ PlayerCharacter::~PlayerCharacter() {
 [[nodiscard]] const std::vector<Buff> PlayerCharacter::GetBuffList() const noexcept { return _player_class->GetBuffList(); }
 [[nodiscard]] const std::vector<Item*> PlayerCharacter::GetBackpackList() const noexcept { return _backpack; }
 
-[[nodiscard]] const EquipmentDelegate* PlayerCharacter::GetEquippedArmorAt(unsigned long long i) noexcept {
+[[nodiscard]] const Armor* PlayerCharacter::GetEquippedArmorAt(unsigned long long i) noexcept {
 	if (!_equipped_armor[i]) return nullptr;
 	return (dynamic_cast<Armor*>(_equipped_armor[i]->_data));
 }
-[[nodiscard]] const EquipmentDelegate* PlayerCharacter::GetEquippedWeaponAt(unsigned long long i) noexcept {
+[[nodiscard]] const Weapon* PlayerCharacter::GetEquippedWeaponAt(unsigned long long i) noexcept {
 	if (!_equipped_weapons[i]) return nullptr;
 	return (dynamic_cast<Weapon*>(_equipped_weapons[i]->_data));
 }
+
+const int PlayerCharacter::Defend(t_dmg damage) const noexcept {
+	int damage_to_take = damage - GetTotalArmor();
+	if (damage_to_take < 1 && damage * 4 < GetTotalArmor()) { damage_to_take = 0; }
+	else if (damage_to_take < 1) { damage_to_take = 1; }
+
+	return damage_to_take;
+}
+
 const t_dmg PlayerCharacter::MeleeAttack() const noexcept {
-	t_dmg tmp_damage = 0;
+	t_dmg dmg_done = 0;
 
 	if (_equipped_weapons[(unsigned long long)WEAPONSLOT::MELEE]) {
 		const Weapon* equipped_weapon = dynamic_cast<Weapon*>(_equipped_weapons[(unsigned long long)WEAPONSLOT::MELEE]->_data);
 		if (equipped_weapon) {
-			tmp_damage = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
+			dmg_done = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
 		}
 	}
 	//default damage is 1/4 of total strength
-	tmp_damage += t_dmg(GetTotalStrength() / 4.f);
+	dmg_done += t_dmg(GetTotalStrength() / 4.f);
 
-	return tmp_damage;
+	return (dmg_done > 1) ? dmg_done : 1;
 }
 const t_dmg PlayerCharacter::RangedAttack() const noexcept {
-	t_dmg tmp_damage_done = 0;
+	t_dmg dmg_done = 0;
 	if (_equipped_weapons[(unsigned long long)WEAPONSLOT::RANGED]) {
 		const Weapon* equipped_weapon = dynamic_cast<Weapon*>(_equipped_weapons[(unsigned long long)WEAPONSLOT::RANGED]->_data);
 		// if weapon exists get the damage, else the base damage stays 0
 		if (equipped_weapon) {
-			tmp_damage_done = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
-			tmp_damage_done += t_dmg(GetTotalAgility() / 4.f);  // add 1/4 of agi as bonus ranged damage
+			dmg_done = Random::NTK(equipped_weapon->MinDamage, equipped_weapon->MaxDamage);
+			dmg_done += t_dmg(GetTotalAgility() / 4.f);  // add 1/4 of agi as bonus ranged damage
 		}
 	}
-	return tmp_damage_done;
+	return (dmg_done > 1) ? dmg_done : 1;
 }
 
 void PlayerCharacter::GiveExp(t_exp amt) noexcept { _player_class->GiveExp(amt); }
 void PlayerCharacter::TakeDamage(t_pw dmg) noexcept { _player_class->HP->SubCur(dmg); }
+void PlayerCharacter::HealthModify(t_pw amt) noexcept { _player_class->HP->ModCur(amt); }
 void PlayerCharacter::Heal(t_pw hl) noexcept { _player_class->HP->AddCur(hl); }
 void PlayerCharacter::ApplyBuff(Buff buff) noexcept { _player_class->ApplyBuff(buff); }

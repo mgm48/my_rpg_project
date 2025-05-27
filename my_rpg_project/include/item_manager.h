@@ -11,6 +11,9 @@ class PlayerCharacter;
 
 class ItemManager {
 public: 
+	static bool IsItemEquippable(const Item* in);
+	static bool IsItemUseable(const Item* in);
+
 	static Item* CreateArmor(std::string name, CoreStats cstats, ARMORSLOT slot);
 	static void CastItemToArmor(const Item* in, Armor*& out);
 	static bool IsItemArmor(const Item* in);
@@ -30,6 +33,7 @@ public:
 	static bool Use(Item* item_to_use, PlayerCharacter* p_char);
 
 	static bool MoveToBackpack(Item* thing, PlayerCharacter* p_char);
+	static bool DiscardFromBackpack(Item* thing, PlayerCharacter* p_char);
 
 	static void DeleteItem(Item*& item_to_delete/*, std::vector<Item*>& pack_to_delete_from*/);
 };

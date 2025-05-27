@@ -63,6 +63,51 @@ namespace rpgsystemsunittest
                 Assert::AreEqual(6, (int)b_buff.Duration);
             }
         }
+        TEST_METHOD(Core_Well) {
+            PointWell hp = PointWell();
+            Assert::AreEqual(1, (int)hp.GetCurrent());
+            Assert::AreEqual(1, (int)hp.GetMax());
+            PointWell mp = PointWell(7);
+            Assert::AreEqual(7, (int)mp.GetCurrent());
+            Assert::AreEqual(7, (int)mp.GetMax());
+            PointWell lp = PointWell(4, 10);
+            Assert::AreEqual(4, (int)lp.GetCurrent());
+            Assert::AreEqual(10, (int)lp.GetMax());
+            lp.AddMax(10);
+            Assert::AreEqual(20, (int)lp.GetCurrent());
+            Assert::AreEqual(20, (int)lp.GetMax());
+            lp.AddMax(-5, false);
+            Assert::AreEqual(15, (int)lp.GetCurrent());
+            Assert::AreEqual(15, (int)lp.GetMax());
+            mp.SetMax(5);
+            Assert::AreEqual(5, (int)mp.GetCurrent());
+            Assert::AreEqual(5, (int)mp.GetMax());
+            hp.AddMax(3, false);
+            Assert::AreEqual(1, (int)hp.GetCurrent());
+            Assert::AreEqual(4, (int)hp.GetMax());
+            hp.AddMax(1);
+            Assert::AreEqual(5, (int)hp.GetCurrent());
+            Assert::AreEqual(5, (int)hp.GetMax());
+            hp.SubCur(7);
+            Assert::AreEqual(0, (int)hp.GetCurrent());
+            Assert::AreEqual(5, (int)hp.GetMax());
+            hp.SubCur(-1);
+            Assert::AreEqual(1, (int)hp.GetCurrent());
+            Assert::AreEqual(5, (int)hp.GetMax());
+            mp.AddCur(-3);
+            Assert::AreEqual(2, (int)mp.GetCurrent());
+            Assert::AreEqual(5, (int)mp.GetMax());
+            mp.AddCur(1);
+            Assert::AreEqual(3, (int)mp.GetCurrent());
+            Assert::AreEqual(5, (int)mp.GetMax());
+            mp.AddCur(5);
+            Assert::AreEqual(5, (int)mp.GetCurrent());
+            Assert::AreEqual(5, (int)mp.GetMax());
+            hp.ModCur(-1); hp.ModCur(-2); hp.ModCur(-2);
+            Assert::AreEqual(1, (int)hp.GetCurrent());
+            Assert::AreEqual(5, (int)hp.GetMax());
+        }
+
         TEST_METHOD(Core_Stats) {
             CoreStats stats_default;
             Assert::AreEqual(0, (int)stats_default.Strength);
@@ -280,12 +325,12 @@ namespace rpgsystemsunittest
 
                 // modify to Poison Potion
                 potion->Name = "Poison Potion";
-                potion->HealAmount = 0;
+                potion->HealAmount = -2;
                 potion->Quantity = 1;
                 potion->SetBuff(new Buff("Poisoned", CoreStats(-2), 3));  // -2 to all stats for 3 rounds
                 Assert::IsNotNull(potion->GetBuff());
                 Assert::AreEqual(std::string("Poison Potion"), potion->Name);
-                Assert::AreEqual(0, (int)potion->HealAmount);
+                Assert::AreEqual(-2, (int)potion->HealAmount);
                 Assert::AreEqual(1, (int)potion->Quantity);
                 Assert::AreEqual(3, (int)potion->GetBuff()->Duration);
                 Assert::AreEqual(std::string("Poisoned"), potion->GetBuff()->Name);
@@ -394,9 +439,16 @@ namespace rpgsystemsunittest
         }
         TEST_METHOD(Simple_Battle) {
             PlayerCharacter rogue(new Rogue());
-            Assert::IsTrue(ItemManager::Equip(ItemManager::CreateWeapon("Dagger", CoreStats(), WEAPONSLOT::MELEE, 1, 3, false), &rogue));
+            Assert::IsTrue(ItemManager::Equip(ItemManager::CreateWeapon("Dagger", CoreStats(0,0,0,5,0), WEAPONSLOT::MELEE, 1, 3, false), &rogue));
 
             Monster monster1(10, 2, 4);
+            Monster m2(10, 1, 1);
+            Monster m3(10, 3, 3);
+            Monster m4(10, 8, 8);
+
+            Assert::AreEqual(0, rogue.Defend(m2.Attack()));
+            Assert::AreEqual(1, rogue.Defend(m3.Attack()));
+            Assert::AreEqual(3, rogue.Defend(m4.Attack()));
 
             while (monster1.HP.GetCurrent() > 0 && rogue.GetCurrentHP() > 0) {
                 monster1.HP.SubCur(rogue.MeleeAttack());
