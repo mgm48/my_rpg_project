@@ -1,6 +1,6 @@
 # my_rpg_project
 
-Coding a simple rpg prototype by myself from 0 in C++ for fun. It is in progress but I am actively working on it.
+Coding a simple rpg prototype by myself from 0 in C++ for fun. Project in progress but being actively worked on.
 
 ## Game design
 
@@ -35,7 +35,7 @@ The main contains the gameplay loop, which includes the following:
 
 Includes tests for all the game logic and makes sure everything is working as intended.
 
-## Things I want to add
+## Future Updates
 
 + Monster improvement
 + Vendor/shop system
