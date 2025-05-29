@@ -191,6 +191,7 @@ bool open_inventory(bool in_combat = false) {
 bool ability_selection(){
 	bool close = false;
 	bool action_used = false;
+	const char* fail_msg = "";
 	int selected = 0;
 
 	while (!close && !action_used) {
@@ -209,6 +210,8 @@ bool ability_selection(){
 		}
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
+		std::cout << fail_msg;
+		fail_msg = "";
 		std::cout << "\nAction -> (x)Close; (w)Up; (s)Down; (e)Use Selected;" << " -> ";
 		char c = getchar();
 		switch (c) {
@@ -262,8 +265,10 @@ bool ability_selection(){
 					}
 					p1->us.Heal(total_heal);
 				}
+				current_abilities[selected]->PutOnCooldown();
 			}
-			current_abilities[selected]->PutOnCooldown();
+			else { fail_msg = "\nAbility couldn't be used.\n"; }
+			
 			break;
 		default:
 			break;
