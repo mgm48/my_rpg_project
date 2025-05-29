@@ -10,26 +10,32 @@ namespace rpgsystemsunittest
 	public:
         TEST_METHOD(Core_Abilities) {
             { //cost = 0, cooldown = 1, hpe = 1
-                Ability default_abil;
-                Assert::AreEqual(std::string("unnamed"), default_abil.GetName());
-                Assert::AreEqual(1u, default_abil.GetHPEffect());
-                Assert::IsNull(default_abil.GetBuff());
-                Assert::AreEqual(0u, default_abil.GetCost());
-                Assert::AreEqual(1u, default_abil.GetCooldown());
-                Assert::AreEqual((int)ABILITYTARGET::SELF, (int)default_abil.GetTarget());
-                Assert::AreEqual((int)ABILITYSCALER::NONE, (int)default_abil.GetScaler());
+                Ability def_abil;
+                Assert::AreEqual(std::string("unnamed"), def_abil.GetName());
+                Assert::AreEqual(1u, def_abil.GetHPEffect());
+                Assert::IsNull(def_abil.GetBuff());
+                Assert::AreEqual(0u, def_abil.GetCost());
+                Assert::AreEqual(1u, def_abil.GetCooldown());
+                Assert::AreEqual((int)ABILITYTARGET::SELF, (int)def_abil.GetTarget());
+                Assert::AreEqual((int)ABILITYSCALER::NONE, (int)def_abil.GetScaler());
             }
             {
-                Ability constructed_abil("custom_name", 3u, 4u, 2u,
+                Ability cust_abil("custom_name", 3u, 4u, 2u,
                     new Buff("ThickSkin", 5, 1, 0, 0, 1, 1),
                     ABILITYTARGET::ENEMY, ABILITYSCALER::STR);
-                Assert::AreEqual(std::string("custom_name"), constructed_abil.GetName());
-                Assert::IsNotNull(constructed_abil.GetBuff());
-                Assert::AreEqual(2u, constructed_abil.GetHPEffect());
-                Assert::AreEqual(3u, constructed_abil.GetCost());
-                Assert::AreEqual(4u, constructed_abil.GetCooldown());
-                Assert::AreEqual((int)ABILITYTARGET::ENEMY, (int)constructed_abil.GetTarget());
-                Assert::AreEqual((int)ABILITYSCALER::STR, (int)constructed_abil.GetScaler());
+                Assert::AreEqual(std::string("custom_name"), cust_abil.GetName());
+                Assert::IsNotNull(cust_abil.GetBuff());
+                Assert::AreEqual(2u, cust_abil.GetHPEffect());
+                Assert::AreEqual(3u, cust_abil.GetCost());
+                Assert::AreEqual(4u, cust_abil.GetCooldown());
+                Assert::AreEqual((int)ABILITYTARGET::ENEMY, (int)cust_abil.GetTarget());
+                Assert::AreEqual((int)ABILITYSCALER::STR, (int)cust_abil.GetScaler());
+                
+                Assert::AreEqual(0u, cust_abil.CooldownLeft);
+                Assert::IsFalse(cust_abil.OnCooldown());
+                cust_abil.PutOnCooldown();
+                Assert::IsTrue(cust_abil.OnCooldown());
+
             }   
         }
         TEST_METHOD(Core_Buffs) {
