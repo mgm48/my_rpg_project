@@ -23,9 +23,11 @@ PlayerCharacterDelegate::~PlayerCharacterDelegate() {}
 [[nodiscard]] t_exp PlayerCharacterDelegate::GetCurrentExp() const noexcept { return _current_exp; }
 [[nodiscard]] t_exp PlayerCharacterDelegate::GetExpToNextLevel() const noexcept { return _exp_to_next_level; }
 
-void PlayerCharacterDelegate::GiveExp(const t_exp gained_exp) noexcept {
+bool PlayerCharacterDelegate::GiveExp(const t_exp gained_exp) noexcept {
+	bool gained_level = false;
 	_current_exp += gained_exp;
-	while (check_if_leveled()) {}
+	while (check_if_leveled()) { gained_level = true; }
+	return gained_level;
 }
 
 [[nodiscard]] const bool PlayerCharacterDelegate::check_if_leveled() noexcept {
@@ -119,7 +121,7 @@ PlayerCharacter::~PlayerCharacter() {
 [[nodiscard]] const t_stat PlayerCharacter::GetTotalArmor() const noexcept { return _player_class->GetTotalArmor() + _equip_modifier.Armor; }
 [[nodiscard]] const t_stat PlayerCharacter::GetTotalElementRes() const noexcept { return _player_class->GetTotalElementRes() + _equip_modifier.ElementRes; }
 
-[[nodiscard]] const std::vector<Ability> PlayerCharacter::GetAbilityList() const noexcept { return _player_class->Abilities; }
+[[nodiscard]] const std::vector<Ability*> PlayerCharacter::GetAbilityList() const noexcept { return _player_class->Abilities; }
 [[nodiscard]] const std::vector<Buff> PlayerCharacter::GetBuffList() const noexcept { return _player_class->GetBuffList(); }
 [[nodiscard]] const std::vector<Item*> PlayerCharacter::GetBackpackList() const noexcept { return _backpack; }
 
@@ -132,7 +134,7 @@ PlayerCharacter::~PlayerCharacter() {
 	return (dynamic_cast<Weapon*>(_equipped_weapons[i]->_data));
 }
 
-const int PlayerCharacter::Defend(t_dmg damage) const noexcept {
+const t_dmg PlayerCharacter::Defend(t_dmg damage) const noexcept {
 	int damage_to_take = damage - GetTotalArmor();
 	if (damage_to_take < 1 && damage * 4 < GetTotalArmor()) { damage_to_take = 0; }
 	else if (damage_to_take < 1) { damage_to_take = 1; }
@@ -167,7 +169,7 @@ const t_dmg PlayerCharacter::RangedAttack() const noexcept {
 	return (dmg_done > 1) ? dmg_done : 1;
 }
 
-void PlayerCharacter::GiveExp(t_exp amt) noexcept { _player_class->GiveExp(amt); }
+bool PlayerCharacter::GiveExp(t_exp amt) noexcept { return _player_class->GiveExp(amt); }
 void PlayerCharacter::TakeDamage(t_pw dmg) noexcept { _player_class->HP->SubCur(dmg); }
 void PlayerCharacter::HealthModify(t_pw amt) noexcept { _player_class->HP->ModCur(amt); }
 void PlayerCharacter::Heal(t_pw hl) noexcept { _player_class->HP->AddCur(hl); }

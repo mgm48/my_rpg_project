@@ -72,11 +72,11 @@ CoreStats& CoreStats::operator=(const t_stat& rhs) { //igualar a un solo stat
 
 std::ostream& operator<<(std::ostream& os, const CoreStats& cs) {
 	os << "[ ";
-	if (cs.Strength != 0) { os << ((cs.Strength > 0) ? "+" : "") << cs.Strength << " str "; }
-	if (cs.Intellect != 0) { os << ((cs.Intellect > 0) ? "+" : "") << cs.Intellect << " int "; }
-	if (cs.Agility != 0) { os << ((cs.Agility > 0) ? "+" : "") << cs.Agility << " agi "; }
-	if (cs.Armor != 0) { os << ((cs.Armor > 0) ? "+" : "") << cs.Armor << " arm "; }
-	if (cs.ElementRes != 0) { os << ((cs.ElementRes > 0) ? "+" : "") << cs.ElementRes << " res "; }
+	if (cs.Strength != 0) { os << ((cs.Strength > 0) ? "Str(+" : "Str(") << cs.Strength << "), "; }
+	if (cs.Intellect != 0) { os << ((cs.Intellect > 0) ? "Int(+" : "Int(") << cs.Intellect << "), "; }
+	if (cs.Agility != 0) { os << ((cs.Agility > 0) ? "Agi(+" : "Agi(") << cs.Agility << "), "; }
+	if (cs.Armor != 0) { os << ((cs.Armor > 0) ? "Arm(+" : "Arm(") << cs.Armor << "), "; }
+	if (cs.ElementRes != 0) { os << ((cs.ElementRes > 0) ? "Arm(+" : "Arm(") << cs.ElementRes << "), "; }
 	os << "]";
 	return os;
 }

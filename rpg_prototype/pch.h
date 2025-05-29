@@ -1,7 +1,7 @@
 #pragma once
-#include "monster.h"
-#include "playercharacter.h"
-#include "playableclasses.h"
+#include "my_rpg_project/monster.h"
+#include "my_rpg_project/playercharacter.h"
+#include "my_rpg_project/playableclasses.h"
 
 struct Player {
 	Player(PlayerCharacterDelegate* p) : us(p) {};

@@ -9,27 +9,27 @@ namespace rpgsystemsunittest
 	TEST_CLASS(rpgsystemsunittest){
 	public:
         TEST_METHOD(Core_Abilities) {
-            {
+            { //cost = 0, cooldown = 1, hpe = 1
                 Ability default_abil;
-                Assert::AreEqual(std::string("unnamed"), default_abil.Name);
-                Assert::AreEqual(0u, default_abil.HpEffect);
-                Assert::IsNull(default_abil.GivenBuff);
-                Assert::AreEqual(0u, default_abil.Cost);
-                Assert::AreEqual(1u, default_abil.Cooldown);
-                Assert::AreEqual((int)ABILITYTARGET::SELF, (int)default_abil.Target);
-                Assert::AreEqual((int)ABILITYSCALER::NONE, (int)default_abil.Scaler);
+                Assert::AreEqual(std::string("unnamed"), default_abil.GetName());
+                Assert::AreEqual(1u, default_abil.GetHPEffect());
+                Assert::IsNull(default_abil.GetBuff());
+                Assert::AreEqual(0u, default_abil.GetCost());
+                Assert::AreEqual(1u, default_abil.GetCooldown());
+                Assert::AreEqual((int)ABILITYTARGET::SELF, (int)default_abil.GetTarget());
+                Assert::AreEqual((int)ABILITYSCALER::NONE, (int)default_abil.GetScaler());
             }
             {
                 Ability constructed_abil("custom_name", 3u, 4u, 2u,
                     new Buff("ThickSkin", 5, 1, 0, 0, 1, 1),
                     ABILITYTARGET::ENEMY, ABILITYSCALER::STR);
-                Assert::AreEqual(std::string("custom_name"), constructed_abil.Name);
-                Assert::IsNotNull(constructed_abil.GivenBuff);
-                Assert::AreEqual(2u, constructed_abil.HpEffect);
-                Assert::AreEqual(3u, constructed_abil.Cost);
-                Assert::AreEqual(4u, constructed_abil.Cooldown);
-                Assert::AreEqual((int)ABILITYTARGET::ENEMY, (int)constructed_abil.Target);
-                Assert::AreEqual((int)ABILITYSCALER::STR, (int)constructed_abil.Scaler);
+                Assert::AreEqual(std::string("custom_name"), constructed_abil.GetName());
+                Assert::IsNotNull(constructed_abil.GetBuff());
+                Assert::AreEqual(2u, constructed_abil.GetHPEffect());
+                Assert::AreEqual(3u, constructed_abil.GetCost());
+                Assert::AreEqual(4u, constructed_abil.GetCooldown());
+                Assert::AreEqual((int)ABILITYTARGET::ENEMY, (int)constructed_abil.GetTarget());
+                Assert::AreEqual((int)ABILITYSCALER::STR, (int)constructed_abil.GetScaler());
             }   
         }
         TEST_METHOD(Core_Buffs) {
@@ -347,12 +347,12 @@ namespace rpgsystemsunittest
             PlayerCharacter p1(new Cleric());
             Assert::AreEqual((int)Cleric::BASEHP, (int)p1.GetMaxHP());
             Assert::AreEqual((int)Cleric::BASEMP, (int)p1.GetMaxMP());
-            Assert::AreEqual(std::string("Heal"), p1.GetAbilityList().front().Name);
+            Assert::AreEqual(std::string("Heal"), p1.GetAbilityList().front()->GetName());
 
             p1.GiveExp(100u);
             // level 2
             Assert::AreEqual(2, (int)p1.GetLevel());
-            Assert::AreEqual(std::string("Smite"), p1.GetAbilityList()[1].Name);
+            Assert::AreEqual(std::string("Smite"), p1.GetAbilityList()[1]->GetName());
             Assert::AreEqual((int)(Cleric::BASEHP + (Cleric::BASEHP / 2.f)), (int)p1.GetMaxHP());
             Assert::AreEqual((int)(Cleric::BASEMP + (Cleric::BASEMP / 2.f)), (int)p1.GetMaxMP());
         }
@@ -363,7 +363,7 @@ namespace rpgsystemsunittest
             p1.GiveExp(100u);
             // level 2
             Assert::AreEqual(2, (int)p1.GetLevel());
-            Assert::AreEqual(std::string("PreciseAttack"), p1.GetAbilityList().front().Name);
+            Assert::AreEqual(std::string("PreciseAttack"), p1.GetAbilityList().front()->GetName());
             Assert::AreEqual((int)(Rogue::BASEHP + (Rogue::BASEHP / 2.f)), (int)p1.GetMaxHP());
         }
         TEST_METHOD(Player_Warrior) {
@@ -373,19 +373,19 @@ namespace rpgsystemsunittest
             p1.GiveExp(100u);
             // level 2
             Assert::AreEqual(2, (int)p1.GetLevel());
-            Assert::AreEqual(std::string("PowerAttack"), p1.GetAbilityList().front().Name);
+            Assert::AreEqual(std::string("PowerAttack"), p1.GetAbilityList().front()->GetName());
             Assert::AreEqual((int)(Warrior::BASEHP + (Warrior::BASEHP / 2.f)), (int)p1.GetMaxHP());
         }
         TEST_METHOD(Player_Wizard) {
             PlayerCharacter p1(new Wizard());
             Assert::AreEqual((int)Wizard::BASEHP, (int)p1.GetMaxHP());
             Assert::AreEqual((int)Wizard::BASEMP, (int)p1.GetMaxMP());
-            Assert::AreEqual(std::string("Firebolt"), p1.GetAbilityList().front().Name);
+            Assert::AreEqual(std::string("Firebolt"), p1.GetAbilityList().front()->GetName());
 
             p1.GiveExp(100u);
             // level 2
             Assert::AreEqual(2, (int)p1.GetLevel());
-            Assert::AreEqual(std::string("IceBolt"), p1.GetAbilityList()[1].Name);
+            Assert::AreEqual(std::string("IceBolt"), p1.GetAbilityList()[1]->GetName());
             Assert::AreEqual((int)(Wizard::BASEHP + (Wizard::BASEHP / 2.f)), (int)p1.GetMaxHP());
             Assert::AreEqual((int)(Wizard::BASEMP + (Wizard::BASEMP / 2.f)), (int)p1.GetMaxMP());
         }
@@ -417,12 +417,24 @@ namespace rpgsystemsunittest
             Assert::IsNotNull(rogue.GetEquippedArmorAt((unsigned long long)ARMORSLOT::RING2));
             Assert::IsNotNull(rogue.GetEquippedArmorAt((unsigned long long)ARMORSLOT::NECK));
 
-            // equipping a potion should fail and go into inventory
-            Assert::IsFalse(ItemManager::Equip(ItemManager::CreatePotion("ArmorPot", 0, 1, new Buff("ArmorBuff", CoreStats(0, 0, 0, 3, 0), 5)), &rogue));
+            // equipping a potion should fail and do nothing (only go to inventory if it was already there)
+            Item* pot = ItemManager::CreatePotion("ArmorPot", 0, 1, new Buff("ArmorBuff", CoreStats(0, 0, 0, 3, 0), 5));
+            Assert::IsFalse(ItemManager::Equip(pot, &rogue));
 
             auto backpack = rogue.GetBackpackList();
-            Assert::AreEqual(1, (int)backpack.size());
+            Assert::AreEqual(0, (int)backpack.size());
+
+            ItemManager::MoveToBackpack(pot,&rogue);
+            auto backpack2 = rogue.GetBackpackList();
+            Assert::AreEqual(1, (int)backpack2.size());
+
+            //TESTS FOR OUTPUT ON CONSOLE
+            //ItemManager::MoveToBackpack(ItemManager::CreateWeapon("TestWeapon1", CoreStats(), WEAPONSLOT::MELEE, 1, 2), &(p1->us));
+            //ItemManager::MoveToBackpack(ItemManager::CreateWeapon("TestWeapon2", CoreStats(-2,1,0,-1,0), WEAPONSLOT::MELEE, 1, 2), &(p1->us));
+            //ItemManager::MoveToBackpack(ItemManager::CreatePotion("TestPoti", Random::NTK(2, 5), Random::NTK(1, 6)), &(p1->us));
+            //ItemManager::MoveToBackpack(ItemManager::CreatePotion("TestPotiNeg", -2, Random::NTK(1, 6)), &(p1->us));
         }
+
         TEST_METHOD(Enemy_Monster) {
             Monster monster1(10, 2, 4);
             Assert::AreEqual(10, (int)monster1.HP.GetMax());
@@ -446,9 +458,9 @@ namespace rpgsystemsunittest
             Monster m3(10, 3, 3);
             Monster m4(10, 8, 8);
 
-            Assert::AreEqual(0, rogue.Defend(m2.Attack()));
-            Assert::AreEqual(1, rogue.Defend(m3.Attack()));
-            Assert::AreEqual(3, rogue.Defend(m4.Attack()));
+            Assert::AreEqual(0, (int) rogue.Defend(m2.Attack()));
+            Assert::AreEqual(1, (int)rogue.Defend(m3.Attack()));
+            Assert::AreEqual(3, (int)rogue.Defend(m4.Attack()));
 
             while (monster1.HP.GetCurrent() > 0 && rogue.GetCurrentHP() > 0) {
                 monster1.HP.SubCur(rogue.MeleeAttack());

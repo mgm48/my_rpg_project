@@ -56,7 +56,7 @@ bool ItemManager::IsItemPotion(const Item* in) {
 
 
 bool ItemManager::Equip(Item* thing, PlayerCharacter* p_char) {
-	if (!thing->GetData() || !thing || !p_char) //most likely to fail to be on the right, as it will be checked first
+	if (!p_char || !thing || !thing->GetData()) //most likely to fail to be on the left, as it will be checked first
 		return false;
 
 	Armor* armor = dynamic_cast<Armor*>(thing->_data);
@@ -103,14 +103,14 @@ bool ItemManager::Equip(Item* thing, PlayerCharacter* p_char) {
 	}
 
 	// if item fails to equip, move it to the characters backpack
-	thing->_marked_as_backpack_ref_gone = false;
-	MoveToBackpack(thing, p_char);
+	//thing->_marked_as_backpack_ref_gone = false;
+	//MoveToBackpack(thing, p_char);
 
 	return false;
 }
 
 bool ItemManager::Use(Item* thing, PlayerCharacter* p_char) {
-	if (!thing->GetData() || !thing || !p_char) //most likely to fail to be on the right, as it will be checked first
+	if (!p_char || !thing || !thing->GetData())
 		return false;
 
 	Potion* potion = dynamic_cast<Potion*>(thing->_data);
@@ -141,14 +141,14 @@ bool ItemManager::Use(Item* thing, PlayerCharacter* p_char) {
 
 
 bool ItemManager::MoveToBackpack(Item* thing, PlayerCharacter* p_char) {
-	if (!thing->GetData() || !thing || !p_char) //most likely to fail to be on the right, as it will be checked first
+	if (!p_char || !thing || !thing->GetData()) //most likely to fail to be on the left, as it will be checked first ( also makes sure we dont access nullpointers)
 		return false;
 
 	p_char->_backpack.push_back(thing);
 	return true;
 }
 bool ItemManager::DiscardFromBackpack(Item* thing, PlayerCharacter* p_char) {
-	if (!thing->GetData() || !thing || !p_char)
+	if (!p_char || !thing || !thing->GetData())
 		return false;
 
 	thing->_marked_for_deletion = true;

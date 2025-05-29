@@ -6,36 +6,36 @@ const char* Warrior::GetClass() noexcept { return "Warrior"; }
 void Warrior::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
-			Abilities.emplace_back("PowerAttack", 0u, 3u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::STR);
+			Abilities.emplace_back(new Ability("PowerAttack", 0u, 3u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::STR));
 		}
-		else if (GetLevel() == 4){
-			Abilities.emplace_back("Healing Surge", 0u, 4u, 4u, nullptr,  ABILITYTARGET::SELF, ABILITYSCALER::NONE);
+		else if (GetLevel() == 3){
+			Abilities.emplace_back(new Ability("Healing Surge", 0u, 4u, 4u, nullptr,  ABILITYTARGET::SELF, ABILITYSCALER::NONE));
 		}
 }
 
 //CLERIC
 Cleric::Cleric() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
 	MP = std::make_unique<PointWell>(BASEMP);
-	Abilities.emplace_back("Heal", 2u, 1u, 2u, nullptr, ABILITYTARGET::ALLY, ABILITYSCALER::INT);
+	Abilities.emplace_back(new Ability("Heal", 2u, 1u, 2u, nullptr, ABILITYTARGET::ALLY, ABILITYSCALER::INT));
 }
 const char* Cleric::GetClass() noexcept { return "Cleric"; }
 void Cleric::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
-			Abilities.emplace_back("Smite", 2u, 1u, 2u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT);
+			Abilities.emplace_back(new Ability("Smite", 2u, 1u, 2u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT));
 		}
 }
 
 //WIZARD
 Wizard::Wizard() : PlayerCharacterDelegate(BASEHP, BASESTR, BASEINT, BASEAGI) {
 	MP = std::make_unique<PointWell>(BASEMP);
-	Abilities.emplace_back("Firebolt", 2u, 1u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT);
+	Abilities.emplace_back(new Ability("Firebolt", 2u, 1u, 4u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT));
 }
 const char* Wizard::GetClass() noexcept { return "Wizard"; }
 void Wizard::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
-			Abilities.emplace_back("IceBolt", 3u, 1u, 6u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT);
+			Abilities.emplace_back(new Ability("IceBolt", 3u, 1u, 6u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::INT));
 			increase_stats(0, 1);
 		}
 }
@@ -46,6 +46,6 @@ const char* Rogue::GetClass() noexcept { return "Rogue"; }
 void Rogue::level_char_up() noexcept {
 	LEVELUP
 		if (GetLevel() == 2) {
-			Abilities.emplace_back("PreciseAttack", 0u, 3u, 6u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::AGI);
+			Abilities.emplace_back(new Ability("PreciseAttack", 0u, 3u, 6u, nullptr, ABILITYTARGET::ENEMY, ABILITYSCALER::AGI));
 		}
 }

@@ -21,10 +21,10 @@ public:
 	[[nodiscard]] t_level GetLevel() const noexcept;
 	[[nodiscard]] t_exp GetCurrentExp() const noexcept;
 	[[nodiscard]] t_exp GetExpToNextLevel() const noexcept;
-	void GiveExp(const t_exp gained_exp) noexcept;
+	bool GiveExp(const t_exp gained_exp) noexcept;
 	std::unique_ptr<PointWell> HP;
 	std::unique_ptr<PointWell> MP;
-	std::vector<Ability> Abilities;
+	std::vector<Ability*> Abilities;
 
 	void ApplyBuff(Buff b) { add_buff(b); }
 	std::vector<Buff> GetBuffList() { return Buffs; }
@@ -69,19 +69,19 @@ public:
 	[[nodiscard]] const t_stat GetTotalArmor() const noexcept;
 	[[nodiscard]] const t_stat GetTotalElementRes() const noexcept;
 
-	[[nodiscard]] const std::vector<Ability> GetAbilityList() const noexcept;
+	[[nodiscard]] const std::vector<Ability*> GetAbilityList() const noexcept;
 	[[nodiscard]] const std::vector<Buff> GetBuffList() const noexcept;
 	[[nodiscard]] const std::vector<Item*> GetBackpackList() const noexcept;
 
 	[[nodiscard]] const Armor* GetEquippedArmorAt(unsigned long long i) noexcept;
 	[[nodiscard]] const Weapon* GetEquippedWeaponAt(unsigned long long i) noexcept;
 
-	const int Defend(t_dmg damage) const noexcept;
+	const t_dmg Defend(t_dmg damage) const noexcept;
 	const t_dmg MeleeAttack() const noexcept;
 	const t_dmg RangedAttack() const noexcept;
 
 	//Mutators
-	void GiveExp(t_exp amt) noexcept;
+	bool GiveExp(t_exp amt) noexcept;
 	void TakeDamage(t_pw dmg) noexcept;
 	void HealthModify(t_pw amt) noexcept;
 	void Heal(t_pw hl) noexcept;

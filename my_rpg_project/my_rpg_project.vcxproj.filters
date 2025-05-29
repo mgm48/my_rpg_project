@@ -50,40 +50,40 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ability.h">
+    <ClInclude Include="include\my_rpg_project\ability.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\buff.h">
+    <ClInclude Include="include\my_rpg_project\buff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\corestats.h">
+    <ClInclude Include="include\my_rpg_project\corestats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\item_manager.h">
+    <ClInclude Include="include\my_rpg_project\item_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\item.h">
+    <ClInclude Include="include\my_rpg_project\item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\playercharacter.h">
+    <ClInclude Include="include\my_rpg_project\playercharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pointwell.h">
+    <ClInclude Include="include\my_rpg_project\pointwell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\stats.h">
+    <ClInclude Include="include\my_rpg_project\stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types.h">
+    <ClInclude Include="include\my_rpg_project\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\playableclasses.h">
+    <ClInclude Include="include\my_rpg_project\playableclasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\monster.h">
+    <ClInclude Include="include\my_rpg_project\monster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\random.h">
+    <ClInclude Include="include\my_rpg_project\random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
