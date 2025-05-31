@@ -1,5 +1,7 @@
 #include "pch.h"
-#include "my_rpg_project/random.h"
+
+//things in testing 
+#include "my_rpg_project/printer.h"
 #include <iostream>
 #include <string>
 
@@ -7,70 +9,9 @@ Player* p1 = nullptr;
 Fightable* mon = nullptr;
 int monsters_defeated = 0;
 
-static void print_equipped_weapon(const Weapon* weapon) {
-	switch (weapon->Slot) {
-	case WEAPONSLOT::MELEE:{ std::cout << "MELEE: "; break; }
-	case WEAPONSLOT::RANGED: { std::cout << "RANGED: "; break; }
-	default: break; }
-	std::cout << weapon->Name << ":  " << "Damage(" << weapon->MinDamage << " - " << weapon->MaxDamage << "); ";
-	if (weapon->Stats.any()) { std::cout << weapon->Stats; }
-
-}
-//enum class ARMORSLOT { HEAD, CHEST, LEGS, FEET, HANDS, RING1, RING2, NECK, NUM_SLOTS };
-static void print_equipped_armor(const Armor* armor) {
-	switch (armor->Slot) {
-	case ARMORSLOT::HEAD: { std::cout << "HEAD: "; break; }
-	case ARMORSLOT::CHEST: { std::cout << "CHEST: "; break; }
-	case ARMORSLOT::LEGS: { std::cout << "LEGS: "; break; }
-	case ARMORSLOT::FEET: { std::cout << "FEET: "; break; }
-	case ARMORSLOT::HANDS: { std::cout << "HANDS: "; break; }
-	case ARMORSLOT::RING1: { std::cout << "RING1: "; break; }
-	case ARMORSLOT::RING2: { std::cout << "RING2: "; break; }
-	case ARMORSLOT::NECK: { std::cout << "NECK: "; break; }
-	default: break; }
-	std::cout << armor->Name << ":  ";
-	if (armor->Stats.any()) { std::cout << armor->Stats; }
-}
-
-static void print_item(Item* it) {
-	if (ItemManager::IsItemArmor(it)) {
-		const Armor* armor = dynamic_cast<const Armor*>(it->GetData());
-		std::cout << armor->Name << ":  ";
-		if (armor->Stats.any()) { std::cout << armor->Stats; }
-	}
-	else if (ItemManager::IsItemWeapon(it)) {
-		const Weapon* weapon = dynamic_cast<const Weapon*>(it->GetData());
-		std::cout << weapon->Name << ":  " << "Damage(" << weapon->MinDamage << " - " << weapon->MaxDamage << ") ";
-		if (weapon->Stats.any()) { std::cout << weapon->Stats; }
-	}
-	else if (ItemManager::IsItemPotion(it)) {
-		const Potion* pot = dynamic_cast<const Potion*>(it->GetData()); //expand to buff potions
-		std::cout << pot->Name << ":  " << ((pot->HealAmount > 0) ? "Heal(+" : "Heal(") << pot->HealAmount << "), Quantity(" << pot->Quantity << ");";
-	}
-	else {
-		std::cout << "Something weird happened, item error.";
-	}
-}
 
 void display_character_sheet() {
-	std::cout
-		<< "\nYour Character\n"
-		<< "-----------------\n"
-		<< "Lvl " << p1->us.GetLevel() << " " << p1->us.GetClass() << " xp: " << p1->us.GetCurrentExp() << "/" << p1->us.GetExpToNextLevel() << "\n"
-		<< "Hit Points: " << p1->us.GetCurrentHP() << "/" << p1->us.GetMaxHP() << '\n';
-	if(p1->us.IsMagicUser()){ std::cout << "Mana: " << p1->us.GetCurrentMP() << "/" << p1->us.GetMaxMP() << '\n';}
-	std::cout
-		<< "STR: " << p1->us.GetTotalStrength() << " INT: " << p1->us.GetTotalIntellect() << " AGI: " << p1->us.GetTotalAgility() << '\n'
-		<< "ARMOR: " << p1->us.GetTotalArmor() << "  RES: " << p1->us.GetTotalElementRes() << '\n'
-		<< "\nEquipped Gear\n" << "-----------------\n";
-	
-	auto i = 0;
-	for (i = 0; i < (unsigned long long)ARMORSLOT::NUM_SLOTS; i++) {
-		if (p1->us.GetEquippedArmorAt(i)) { print_equipped_armor(p1->us.GetEquippedArmorAt(i)); std::cout << "\n"; }
-	}
-	for (i = 0; i < (unsigned long long)WEAPONSLOT::NUM_SLOTS; i++) {
-		if (p1->us.GetEquippedWeaponAt(i)) { print_equipped_weapon(p1->us.GetEquippedWeaponAt(i)); std::cout << "\n"; }
-	}
+	print_character_sheet(p1);
 
 	std::cin.ignore(100, '\n');
 	std::cout << "\n Press Enter to close the sheet.\n";

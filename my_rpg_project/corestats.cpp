@@ -70,13 +70,13 @@ CoreStats& CoreStats::operator=(const t_stat& rhs) { //igualar a un solo stat
 	return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const CoreStats& cs) {
+std::ostream& operator<<(std::ostream& os, const CoreStats& cs) { //todo change to printer function
 	os << "[ ";
-	if (cs.Strength != 0) { os << ((cs.Strength > 0) ? "Str(+" : "Str(") << cs.Strength << "), "; }
-	if (cs.Intellect != 0) { os << ((cs.Intellect > 0) ? "Int(+" : "Int(") << cs.Intellect << "), "; }
-	if (cs.Agility != 0) { os << ((cs.Agility > 0) ? "Agi(+" : "Agi(") << cs.Agility << "), "; }
-	if (cs.Armor != 0) { os << ((cs.Armor > 0) ? "Arm(+" : "Arm(") << cs.Armor << "), "; }
-	if (cs.ElementRes != 0) { os << ((cs.ElementRes > 0) ? "Arm(+" : "Arm(") << cs.ElementRes << "), "; }
+	if (cs.Strength != 0) { os << ((cs.Strength > 0) ? "STR(+" : "STR(") << cs.Strength << ") "; }
+	if (cs.Intellect != 0) { os << ((cs.Intellect > 0) ? "INT(+" : "INT(") << cs.Intellect << ") "; }
+	if (cs.Agility != 0) { os << ((cs.Agility > 0) ? "AGI(+" : "AGI(") << cs.Agility << ") "; }
+	if (cs.Armor != 0) { os << ((cs.Armor > 0) ? "ARM(+" : "ARM(") << cs.Armor << ") "; }
+	if (cs.ElementRes != 0) { os << ((cs.ElementRes > 0) ? "RES(+" : "RES(") << cs.ElementRes << ") "; }
 	os << "]";
 	return os;
 }

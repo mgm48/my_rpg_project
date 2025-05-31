@@ -148,14 +148,17 @@
     <ClCompile Include="stats.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data\constants.h" />
     <ClInclude Include="include\my_rpg_project\ability.h" />
     <ClInclude Include="include\my_rpg_project\buff.h" />
     <ClInclude Include="include\my_rpg_project\corestats.h" />
     <ClInclude Include="include\my_rpg_project\item.h" />
     <ClInclude Include="include\my_rpg_project\item_manager.h" />
+    <ClInclude Include="include\my_rpg_project\json_conv.h" />
     <ClInclude Include="include\my_rpg_project\playableclasses.h" />
     <ClInclude Include="include\my_rpg_project\playercharacter.h" />
     <ClInclude Include="include\my_rpg_project\pointwell.h" />
+    <ClInclude Include="include\my_rpg_project\printer.h" />
     <ClInclude Include="include\my_rpg_project\stats.h" />
     <ClInclude Include="include\my_rpg_project\typing.h" />
     <ClInclude Include="include\my_rpg_project\monster.h" />

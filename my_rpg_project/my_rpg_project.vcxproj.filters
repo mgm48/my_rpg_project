@@ -86,5 +86,14 @@
     <ClInclude Include="include\my_rpg_project\random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\my_rpg_project\json_conv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\my_rpg_project\printer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "my_rpg_project/monster.h"
 #include "my_rpg_project/playercharacter.h"
 #include "my_rpg_project/playableclasses.h"
+#include "my_rpg_project/random.h"
 
 struct Player {
 	Player(PlayerCharacterDelegate* p) : us(p) {};
