@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "typing.h"
 
 class PointWell { //could be health, mana, coins 
 public:

@@ -1,6 +1,6 @@
 #pragma once
-#include <types.h>
-#include <pointwell.h>
+#include "typing.h"
+#include "pointwell.h"
 #include <memory>
 
 class Monster {

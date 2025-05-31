@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "typing.h"
 #include "item.h"
 
 //item creation manager, only one allowed to make items

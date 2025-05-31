@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;$(IncludePath)</IncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;$(IncludePath)</IncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;$(IncludePath)</IncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;$(IncludePath)</IncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,7 +157,7 @@
     <ClInclude Include="include\my_rpg_project\playercharacter.h" />
     <ClInclude Include="include\my_rpg_project\pointwell.h" />
     <ClInclude Include="include\my_rpg_project\stats.h" />
-    <ClInclude Include="include\my_rpg_project\types.h" />
+    <ClInclude Include="include\my_rpg_project\typing.h" />
     <ClInclude Include="include\my_rpg_project\monster.h" />
     <ClInclude Include="include\my_rpg_project\random.h" />
   </ItemGroup>

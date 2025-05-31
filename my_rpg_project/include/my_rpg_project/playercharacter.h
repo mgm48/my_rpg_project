@@ -3,7 +3,7 @@
 #include "pointwell.h"
 #include "ability.h"
 #include "item.h"
-#include "types.h"
+#include "typing.h"
 #include "item_manager.h"
 #include <memory>
 #include <string>

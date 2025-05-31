@@ -74,7 +74,7 @@
     <ClInclude Include="include\my_rpg_project\stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\my_rpg_project\types.h">
+    <ClInclude Include="include\my_rpg_project\typing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\my_rpg_project\playableclasses.h">
