@@ -89,11 +89,19 @@
     <ClInclude Include="include\my_rpg_project\json_conv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\constants.h">
+    <ClInclude Include="include\my_rpg_project\constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\my_rpg_project\printer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\my_rpg_project\location.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\default.json" />
+    <None Include="data\leveltree.json" />
+    <None Include="data\save.json" />
   </ItemGroup>
 </Project>

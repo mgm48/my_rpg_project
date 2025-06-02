@@ -2,11 +2,14 @@
 
 //things in testing 
 #include "my_rpg_project/printer.h"
+#include "my_rpg_project/constants.h"
+#include "my_rpg_project/location.h"
 #include <iostream>
 #include <string>
 
 Player* p1 = nullptr;
 Fightable* mon = nullptr;
+Location* loc = nullptr;
 int monsters_defeated = 0;
 
 
@@ -286,8 +289,8 @@ void create_monster(Fightable* tmp_mon, const Player* base_calc) {
 	tmp_mon = new Fightable(Random::NTK(lowest_hp, max_hp), lowest_dam, max_dam);
 
 	do {
-		tmp_mon->xpos = Random::NTK(1, DIM_X - 2); //DIM - 1 es la barrera
-		tmp_mon->ypos = Random::NTK(1, DIM_Y - 2);
+		tmp_mon->xpos = Random::NTK(1, loc->DIM_X - 2); //DIM - 1 es la barrera
+		tmp_mon->ypos = Random::NTK(1, loc->DIM_Y - 2);
 	} while (abs(tmp_mon->xpos - p1->xpos) < 3 || abs(tmp_mon->ypos - p1->ypos) < 3);
 
 	mon = tmp_mon;
@@ -381,40 +384,76 @@ void fight(Player& player1) {
 }
 
 //todo make this two functions where one makes sure movement valid for an entity and returns enum move dir (pos updated on update)
-bool move_player(Player& p, char input) {
+bool move_player(Player &p, char input) {
 	if (input == 'w') {
-		if (p.ypos != 1) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.ypos--; }
-		else { std::cout << "\nTHERE IS A WALL THERE MY GUY"; }
+		if (p.ypos != 1 || loc->IsConnectionPoint(p.ypos - 1,p.xpos)) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.ypos--; }
 		return true;
 	}
 	else if (input == 's') {
-		if (p.ypos != DIM_Y - 2) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.ypos++; } //else = wall
-		else { std::cout << "\nTHERE IS A WALL THERE MY GUY"; }
+		if (p.ypos != loc->DIM_Y - 2 || loc->IsConnectionPoint(p.ypos + 1, p.xpos)) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.ypos++; } //else = wall
 		return true;
 	}
 	else if (input == 'a') {
-		if (p.xpos != 1) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.xpos--; }
-		else { std::cout << "\nTHERE IS A WALL THERE MY GUY"; }
+		if (p.xpos != 1 || loc->IsConnectionPoint(p.ypos, p.xpos - 1)) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.xpos--; }
 		return true;
 	}
 	else if (input == 'd') {
-		if (p.xpos != DIM_X - 2) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.xpos++; }
-		else { std::cout << "\nTHERE IS A WALL THERE MY GUY"; }
+		if (p.xpos != loc->DIM_X - 2 || loc->IsConnectionPoint(p.ypos, p.xpos + 1)) { p.prev_xpos = p.xpos; p.prev_ypos = p.ypos; p.xpos++; }
 		return true;
 	}
 	else { return false; }
 }
 
-void update() { if (mon->ypos == p1->ypos && mon->xpos == p1->xpos) { fight(*p1); } }
+bool move_locations(Player &p,Location* &new_loc,const DIRECTION dir) {
+	if (!new_loc || new_loc->Connections[(t_enum)dir] != loc) return false;
 
-void show_map() {
+	switch (dir) {
+		case DIRECTION::NORTH: //entering north
+			p.prev_xpos = p.xpos; p.prev_ypos = p.ypos;
+			p.xpos = new_loc->DIM_X / 2; p.ypos = 1;
+			break;
+		case DIRECTION::SOUTH: //entering south
+			p.prev_xpos = p.xpos; p.prev_ypos = p.ypos;
+			p.xpos = new_loc->DIM_X / 2; p.ypos = new_loc->DIM_Y - 2;
+			break;
+		case DIRECTION::EAST:  //entering east
+			p.prev_xpos = p.xpos; p.prev_ypos = p.ypos;
+			p.xpos = new_loc->DIM_X - 2; p.ypos = new_loc->DIM_Y / 2;
+			break;
+		case DIRECTION::WEST:  //entering west
+			p.prev_xpos = p.xpos; p.prev_ypos = p.ypos;
+			p.xpos = 1; p.ypos = new_loc->DIM_Y / 2;
+			break;
+		default:
+			break;
+	}
+	loc = new_loc;
+	return true;
+}
+
+void update() { 
+	if (mon->ypos == p1->ypos && mon->xpos == p1->xpos) { fight(*p1); } 
+	else if (loc->IsConnectionPoint(p1->ypos, p1->xpos)) {
+		DIRECTION dir = loc->GetConnection(p1->ypos, p1->xpos);
+		move_locations(*p1, loc->Connections[(t_enum)dir], Location::op(dir));
+	}
+}
+
+void show_map() { //use location, player and monsters
 	system("CLS");
-	for (int i = 0; i < DIM_Y; i++) {
-		for (int j = 0; j < DIM_X + 1; j++) {
-			if (i == p1->ypos && j == p1->xpos) { std::cout << 'P'; }
-			else if (i == mon->ypos && j == mon->xpos) { std::cout << 'M'; }
+	std::cout << loc->Name << "\n";
+	for (int y = 0; y < loc->DIM_Y; y++) {
+		for (int x = 0; x < loc->DIM_X; x++) {
+			if (y == 0 || y == loc->DIM_Y - 1 || x == 0 || x == loc->DIM_X - 1) {
+				if (loc->IsConnectionPoint(y,x)) { 
+					std::cout << 'O'; 
+				}
+				else std::cout << 'x';
+			}
+			else if (y == p1->ypos && x == p1->xpos) { std::cout << 'P'; }
+			else if (y == mon->ypos && x == mon->xpos) { std::cout << 'M'; }
 			else
-				std::cout << the_map[i][j];
+				std::cout << ' ';
 		}
 		std::cout << '\n';
 	}
@@ -424,7 +463,12 @@ void show_map() {
 //include game visual library to use
 int main(int argc, char** argv) {
 
-	bool runnin = true;
+	//print_log(MAIN_LOG, "hola");
+	loc = new Location("Valley", 12, 30);
+	Location* l2 = new Location("Village", 10, 17);
+	loc->establish_connection(l2, DIRECTION::WEST);
+
+
 	std::cout << "\nHello! Welcome to this world! \n\n Choose who you want to be: \n"
 		<< "1 = Cleric    2 = Warrior\n"
 		<< "3 = Rogue     4 = Wizard\n";

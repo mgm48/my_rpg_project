@@ -148,13 +148,14 @@
     <ClCompile Include="stats.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data\constants.h" />
+    <ClInclude Include="include\my_rpg_project\constants.h" />
     <ClInclude Include="include\my_rpg_project\ability.h" />
     <ClInclude Include="include\my_rpg_project\buff.h" />
     <ClInclude Include="include\my_rpg_project\corestats.h" />
     <ClInclude Include="include\my_rpg_project\item.h" />
     <ClInclude Include="include\my_rpg_project\item_manager.h" />
     <ClInclude Include="include\my_rpg_project\json_conv.h" />
+    <ClInclude Include="include\my_rpg_project\location.h" />
     <ClInclude Include="include\my_rpg_project\playableclasses.h" />
     <ClInclude Include="include\my_rpg_project\playercharacter.h" />
     <ClInclude Include="include\my_rpg_project\pointwell.h" />
@@ -163,6 +164,11 @@
     <ClInclude Include="include\my_rpg_project\typing.h" />
     <ClInclude Include="include\my_rpg_project\monster.h" />
     <ClInclude Include="include\my_rpg_project\random.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\default.json" />
+    <None Include="data\leveltree.json" />
+    <None Include="data\save.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

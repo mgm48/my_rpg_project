@@ -4,14 +4,15 @@
 #include "my_rpg_project/playableclasses.h"
 #include "my_rpg_project/random.h"
 
+
 struct Player {
 	Player(PlayerCharacterDelegate* p) : us(p) {};
 	Player() = delete;
 	bool IsAlive() { return us.GetCurrentHP() > 0; }
 	PlayerCharacter us;
-	int prev_ypos = 10;
+	int prev_ypos = 1;
 	int prev_xpos = 10;
-	int ypos = 10;
+	int ypos = 1;
 	int xpos = 10;
 };
 

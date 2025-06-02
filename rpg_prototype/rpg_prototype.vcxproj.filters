@@ -24,4 +24,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\default.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\leveltree.json" />
+  </ItemGroup>
 </Project>

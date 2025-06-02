@@ -2,7 +2,6 @@
 #include "corestats.h"
 #include "buff.h"
 #include <string>
-//#include <iostream>
 #include <typeinfo>
 
 class ItemDelegate {

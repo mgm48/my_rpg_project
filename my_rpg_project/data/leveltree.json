@@ -1,0 +1,11 @@
+//all abilities
+{
+  "buff": "",
+  "cooldown": 0,
+  "cost": 0,
+  "hpeffect": 0,
+  "name": "Power Attack",
+  "object": "Ability",
+  "target": "ally",
+  "scaler": "int"
+}

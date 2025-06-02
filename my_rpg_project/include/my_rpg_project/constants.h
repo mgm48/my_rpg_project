@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 const int NAME_LENGTH = 50;
 const std::string SAVE_FILE = "data/save.json";
