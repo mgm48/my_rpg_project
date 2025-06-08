@@ -25,6 +25,7 @@ public:
 	CHARACTERDEF(18, 0, 5, 2, 2, true)
 		Warrior();
 
+	const char* description() noexcept override;
 	const char* GetClass() noexcept override;
 private:
 	void level_char_up() noexcept override;
@@ -35,6 +36,7 @@ public:
 	CHARACTERDEF(14, 10, 3, 5, 1, true)
 		Cleric();
 
+	const char* description() noexcept override;
 	const char* GetClass() noexcept override;
 private:
 	void level_char_up() noexcept override;
@@ -45,6 +47,7 @@ public:
 	CHARACTERDEF(10, 14, 1, 8, 1, false)
 		Wizard();
 
+	const char* description() noexcept override;
 	const char* GetClass() noexcept override;
 private:
 	void level_char_up() noexcept override;
@@ -55,6 +58,7 @@ public:
 	CHARACTERDEF(12, 0, 3, 3, 5, false)
 		Rogue();
 
+	const char* description() noexcept override;
 	const char* GetClass() noexcept override;
 private:
 	void level_char_up() noexcept override;

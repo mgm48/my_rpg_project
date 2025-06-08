@@ -85,7 +85,7 @@ PlayerCharacter::~PlayerCharacter() {
 		}
 	}
 }
-
+[[nodiscard]] const char* PlayerCharacter::description() const noexcept { return _player_class->description(); }
 [[nodiscard]] const char* PlayerCharacter::GetClass() const noexcept{ return _player_class->GetClass() ;}
 
 [[nodiscard]] const t_level PlayerCharacter::GetLevel() const noexcept { return _player_class->GetLevel(); }

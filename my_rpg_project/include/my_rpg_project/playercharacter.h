@@ -17,6 +17,7 @@ public:
 	PlayerCharacterDelegate();
 	PlayerCharacterDelegate(t_pw bhp, t_stat str, t_stat in, t_stat agi);
 	virtual ~PlayerCharacterDelegate() = 0;
+	virtual const char* description() = 0;
 	virtual const char* GetClass() = 0;
 	[[nodiscard]] t_level GetLevel() const noexcept;
 	[[nodiscard]] t_exp GetCurrentExp() const noexcept;
@@ -45,6 +46,7 @@ public:
 	~PlayerCharacter();
 
 	//Getters
+	[[nodiscard]] const char* description() const noexcept;
 	[[nodiscard]] const char* GetClass() const noexcept;
 	[[nodiscard]] const t_level GetLevel() const noexcept;
 	[[nodiscard]] const t_exp GetCurrentExp() const noexcept;
