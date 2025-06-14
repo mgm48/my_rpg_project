@@ -71,16 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib\nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib\nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib\nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include;C:\hlocal\gamedev\my_rpg_project\my_rpg_project\include\my_rpg_project;C:\vclib\nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,6 +142,9 @@
     <ClCompile Include="ability.cpp" />
     <ClCompile Include="buff.cpp" />
     <ClCompile Include="corestats.cpp" />
+    <ClCompile Include="logger.cpp" />
+    <ClCompile Include="json_conv.cpp" />
+    <ClCompile Include="location.cpp" />
     <ClCompile Include="monster.cpp" />
     <ClCompile Include="playableclasses.cpp" />
     <ClCompile Include="item.cpp" />
@@ -148,7 +155,7 @@
     <ClCompile Include="stats.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\my_rpg_project\constants.h" />
+    <ClInclude Include="include\my_rpg_project\files.h" />
     <ClInclude Include="include\my_rpg_project\ability.h" />
     <ClInclude Include="include\my_rpg_project\buff.h" />
     <ClInclude Include="include\my_rpg_project\corestats.h" />
@@ -156,6 +163,7 @@
     <ClInclude Include="include\my_rpg_project\item_manager.h" />
     <ClInclude Include="include\my_rpg_project\json_conv.h" />
     <ClInclude Include="include\my_rpg_project\location.h" />
+    <ClInclude Include="include\my_rpg_project\logger.h" />
     <ClInclude Include="include\my_rpg_project\playableclasses.h" />
     <ClInclude Include="include\my_rpg_project\playercharacter.h" />
     <ClInclude Include="include\my_rpg_project\pointwell.h" />
@@ -164,11 +172,6 @@
     <ClInclude Include="include\my_rpg_project\typing.h" />
     <ClInclude Include="include\my_rpg_project\monster.h" />
     <ClInclude Include="include\my_rpg_project\random.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\default.json" />
-    <None Include="data\leveltree.json" />
-    <None Include="data\save.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

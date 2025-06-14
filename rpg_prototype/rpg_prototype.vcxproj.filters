@@ -29,5 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\leveltree.json" />
+    <None Include="test.json" />
+    <None Include="data\map.json" />
+    <None Include="data\save.json" />
   </ItemGroup>
 </Project>

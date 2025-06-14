@@ -1,0 +1,20 @@
+{
+  "locations": [
+    {
+      "dim_y": 12,
+      "dim_x": 30,
+      "encounter_rate": 0.3,
+      "enemies": [ "orc", "goblin" ],
+      "name": "Valley",
+      "object": "Location"
+    },
+    {
+      "dim_y": 10,
+      "dim_x": 17,
+      "encounter_rate": 0.3,
+      "enemies": [ "orc", "wolf" ],
+      "name": "Plain",
+      "object": "Location"
+    }
+  ]
+}

@@ -150,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\leveltree.json" />
+    <None Include="data\map.json" />
+    <None Include="data\save.json" />
+    <None Include="test.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

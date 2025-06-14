@@ -2,7 +2,8 @@
 
 //things in testing 
 #include "my_rpg_project/printer.h"
-#include "my_rpg_project/constants.h"
+#include "my_rpg_project/logger.h"
+#include "my_rpg_project/files.h"
 #include "my_rpg_project/location.h"
 #include <iostream>
 #include <string>
@@ -356,8 +357,8 @@ void fight(Player& player1) {
 	if (player1.IsAlive()) {
 		std::cout << "You Won vs the Monster!\n";
 		//exp
-		std::cout << "Gained: " << mon->xpworth << " exp\n";
-		if (player1.us.GiveExp(mon->xpworth)) {
+		std::cout << "Gained: " << mon->monster.GetExpYield() << " exp\n";
+		if (player1.us.GiveExp(mon->monster.GetExpYield())) {
 			std::cout << "Leveled up! New Lvl = " << player1.us.GetLevel() << "\n";
 		}
 
@@ -404,7 +405,7 @@ bool move_player(Player &p, char input) {
 	else { return false; }
 }
 
-bool move_locations(Player &p,Location* &new_loc,const DIRECTION dir) {
+bool move_locations(Player &p,Location* &new_loc, const DIRECTION dir) {
 	if (!new_loc || new_loc->Connections[(t_enum)dir] != loc) return false;
 
 	switch (dir) {
@@ -437,6 +438,7 @@ void update() {
 		DIRECTION dir = loc->GetConnection(p1->ypos, p1->xpos);
 		move_locations(*p1, loc->Connections[(t_enum)dir], Location::op(dir));
 	}
+	//update to spawn monster
 }
 
 void show_map() { //use location, player and monsters
@@ -463,11 +465,15 @@ void show_map() { //use location, player and monsters
 //include game visual library to use
 int main(int argc, char** argv) {
 
-	//print_log(MAIN_LOG, "hola");
-	loc = new Location("Valley", 12, 30);
-	Location* l2 = new Location("Village", 10, 17);
-	loc->establish_connection(l2, DIRECTION::WEST);
+	print_log(MAIN_LOG, "Starting New Game", false);
+	loc = Location::load_location("Valley");
+	print_location(loc);
 
+	//std::vector<std::string> e = { "wolf","orc" };
+	//loc = new Location("Valley", 12, 30, e, 0.4);
+	Location* l2 = Location::load_location("Plain");
+	loc->establish_connection(l2, DIRECTION::WEST);
+	print_location(loc);
 
 	std::cout << "\nHello! Welcome to this world! \n\n Choose who you want to be: \n"
 		<< "1 = Cleric    2 = Warrior\n"
@@ -481,7 +487,6 @@ int main(int argc, char** argv) {
 		std::cout << "I'm sorry but that is not allowed :(. Choose again: ";
 		std::cin >> choice;    // After cin is restored and any garbage in the stream has been cleared, store user input in number again
 	}
-	std::cout << "\nGreat! You will become " << descriptions[choice - 1] << '\n';
 
 	switch (choice) {
 	case 1: { p1 = new Player(new Cleric()); } break;
@@ -491,6 +496,7 @@ int main(int argc, char** argv) {
 	default:
 		return -12;  // failed to make player character
 	}
+	std::cout << "\nGreat! You will become " << p1->us.description() << '\n';
 	create_monster(mon, p1);
 
 	//random starting drops

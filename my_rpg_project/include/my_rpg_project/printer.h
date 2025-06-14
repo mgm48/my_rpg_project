@@ -1,10 +1,9 @@
 #pragma once
 #include "item.h"
+#include "location.h"
 #include "playableclasses.h"
 #include <iostream>
-#include <fstream>
-#include <chrono>
-#include <ctime>
+
 
 static void print_weapon(const Weapon* weapon) {
 	if (!weapon)
@@ -58,6 +57,14 @@ static void print_item(Item* it) {
 	}
 }
 
+static void print_location(Location* L) {
+	std::cout << "Location: " << L->Name << "\n"
+		<< "Dimension Y: " << L->DIM_Y << " Dimension X: " << L->DIM_X << "\n";
+	for (auto i = 0; i < (t_enum)DIRECTION::NUM_DIR; i++) {
+		if (L->Connections[i]) { std::cout << "Connection " << i << " to " << L->Connections[i]->Name << "\n"; }
+	}
+}
+
 static void print_character_sheet(Player*& p) {
 	std::cout
 		<< "\nYour Character\n"
@@ -77,21 +84,4 @@ static void print_character_sheet(Player*& p) {
 	for (i = 0; i < (unsigned long long)WEAPONSLOT::NUM_SLOTS; i++) {
 		if (p->us.GetEquippedWeaponAt(i)) { print_weapon(p->us.GetEquippedWeaponAt(i)); std::cout << "\n"; }
 	}
-}
-
-void print_log(std::string filename, std::string msg, bool append = true) {
-	std::ofstream log; //if the file desnt exist it creates it
-	if (append) { log.open(filename, std::fstream::app); } //flag assures append
-	else { log.open(filename); }
-
-	char tmp[1000];
-	struct tm p;
-	time_t now = time(0);
-	localtime_s(&p, &now);
-	strftime(tmp, 1000, "%B %d, %H:%M:%S", &p);
-
-	if(!log) { std::cout << "Error: " << filename << " failed to open.\n"; return; }
-	msg = (std::string) tmp + " " + msg + "\n";
-	log << msg;
-	log.close();
 }

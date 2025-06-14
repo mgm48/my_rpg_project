@@ -1,6 +1,8 @@
 #pragma once
 #include <nlohmann/json.hpp>
-#include "item.h"
+
+class Location;
+class Item;
 
 // for convenience
 using json = nlohmann::json;
@@ -13,11 +15,8 @@ using json = nlohmann::json;
 //    {TS_COMPLETED, "completed"},
 //    })
 
-void to_json(json& j, const Item& I) {
-    //j = nlohmann::json{ {"object", "Item"}, {"name", I.name}, {"type", I.type}, {"stat", I.stat} };
-}
-void from_json(const json& j, Item& I) {
-    //I.name = j.at("name").get<std::string>();
-   // I.type = j.at("type").get<Type>();
-    //I.stat = j.at("stat").get<int>();
-}
+void to_json(json& j, const Item& I);
+void from_json(const json& j, Item& I);
+
+void to_json(json& j, const Location& L);
+void from_json(const json& j, Location& L);

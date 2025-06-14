@@ -10,5 +10,5 @@ typedef std::uint16_t item_count;
 typedef std::uint64_t t_exp;
 typedef std::uint16_t t_level;
 
-typedef std::uint16_t t_coord;
+typedef std::uint16_t t_map;
 typedef unsigned long long t_enum;

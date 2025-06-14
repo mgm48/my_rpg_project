@@ -48,6 +48,15 @@
     <ClCompile Include="random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="json_conv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="location.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\my_rpg_project\ability.h">
@@ -89,7 +98,7 @@
     <ClInclude Include="include\my_rpg_project\json_conv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\my_rpg_project\constants.h">
+    <ClInclude Include="include\my_rpg_project\files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\my_rpg_project\printer.h">
@@ -98,10 +107,8 @@
     <ClInclude Include="include\my_rpg_project\location.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\default.json" />
-    <None Include="data\leveltree.json" />
-    <None Include="data\save.json" />
+    <ClInclude Include="include\my_rpg_project\logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
